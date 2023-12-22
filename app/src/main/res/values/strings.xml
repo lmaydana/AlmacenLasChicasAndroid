@@ -10,6 +10,7 @@
     <string name="buy_place_autocomplete_text">Lugar de compra</string>
     <string-array name="buy_places">
         <item>Dulcenter</item>
+        <item>Dulcenter</item>
         <item>Brown</item>
         <item>Maxiconsumo</item>
         <item>Sourigues</item>
