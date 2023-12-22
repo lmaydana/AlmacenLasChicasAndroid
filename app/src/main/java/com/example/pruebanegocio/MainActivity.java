@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startRequestsView(View view){
-        Intent requestIntent = new Intent(this, requestsActivity.class);
+        Intent requestIntent = new Intent(this, requestsActivitys.class);
         startActivity(requestIntent);
     }
 }

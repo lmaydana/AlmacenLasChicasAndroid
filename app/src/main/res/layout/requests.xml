@@ -1,9 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/principalLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/amount"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/amount_column"
+                tools:text="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content">
+
+            <AutoCompleteTextView
+                android:id="@+id/buyPlaces"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/buy_place_autocomplete_text"
+                android:inputType="none" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -15,7 +48,7 @@
             android:clickable="false">
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/amountColumn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -25,7 +58,7 @@
                 android:textColor="@color/white" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/nameColumn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -35,7 +68,17 @@
                 android:textColor="@color/white" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/placeColumn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#6750A4"
+                android:text="@string/place_column"
+                android:textAlignment="center"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/actualCostColumn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -64,7 +107,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Yerba RosaMonte x 500grs"
+                android:text="Yerba Rosamonte x 500grs"
+                android:textAlignment="center"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="General"
                 android:textAlignment="center"
                 android:textColor="@color/white" />
 
@@ -97,7 +149,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Yerba RosaMonte x 500grs"
+                android:text="Yerba Rosamonte x 500grs"
+                android:textAlignment="center"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Dulcenter"
                 android:textAlignment="center"
                 android:textColor="@color/white" />
 

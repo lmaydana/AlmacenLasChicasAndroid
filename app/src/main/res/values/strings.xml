@@ -5,4 +5,19 @@
     <string name="amount_column">Cantidad</string>
     <string name="product_name_column">Nombre de producto</string>
     <string name="price_column">Precio actual</string>
+    <string name="place_column">Lugar</string>
+    <string name="amount_edit_text">Cantidad</string>
+    <string name="buy_place_autocomplete_text">Lugar de compra</string>
+    <string-array name="buy_places">
+        <item>Dulcenter</item>
+        <item>Brown</item>
+        <item>Maxiconsumo</item>
+        <item>Sourigues</item>
+        <item>Carlos</item>
+        <item>Disquil</item>
+        <item>Lecheria</item>
+        <item>Lecheria gordo</item>
+        <item>Pepsico</item>
+        <item>Quilmes</item>
+    </string-array>
 </resources>

@@ -10,6 +10,7 @@
     tools:context=".MainActivity">
 
     <LinearLayout
+        android:id="@+id/editProducts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal|center_vertical"
@@ -26,6 +27,7 @@
             android:fontFamily="@font/athiti_semibold"
             android:insetTop="0dp"
             android:insetBottom="0dp"
+            android:onClick="startRequestsView"
             android:paddingLeft="0dp"
             android:paddingTop="0dp"
             android:paddingRight="0dp"
