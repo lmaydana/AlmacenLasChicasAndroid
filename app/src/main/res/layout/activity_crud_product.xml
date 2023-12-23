@@ -45,7 +45,7 @@
             app:cornerRadius="0dp" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/addProduct"
             android:layout_width="62dp"
             android:layout_height="50dp"
             android:layout_margin="0dp"
