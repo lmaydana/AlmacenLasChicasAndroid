@@ -3,10 +3,13 @@ package com.example.pruebanegocio;
 import android.app.AppComponentFactory;
 import android.view.View;
 
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanIntentResult;
 import com.journeyapps.barcodescanner.ScanOptions;
 
 public class BarCodeEvent implements View.OnClickListener {
@@ -14,11 +17,8 @@ public class BarCodeEvent implements View.OnClickListener {
     String barcode;
     private final ActivityResultLauncher<ScanOptions> barcodeLauncher;
 
-    public BarCodeEvent(AppCompatActivity activity){
-        barcodeLauncher = activity.registerForActivityResult(new ScanContract(), result->{
-            barcode = result.getContents();
-            System.out.println("EL CODIGO: "+ barcode);
-        });
+    public BarCodeEvent(AppCompatActivity activity, ActivityResultCallback<ScanIntentResult> function){
+        barcodeLauncher = activity.registerForActivityResult(new ScanContract(), function);
     }
     @Override
     public void onClick(View view) {
