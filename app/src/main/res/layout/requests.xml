@@ -50,140 +50,143 @@
 
     </LinearLayout>
 
-    <TableLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" >
 
-        <TableRow
+        <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:baselineAligned="false"
-            android:clickable="false">
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/amountColumn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#6750A4"
-                android:text="@string/amount_column"
-                android:textAlignment="center"
-                android:textColor="@color/white" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:baselineAligned="false"
+                android:clickable="false">
 
-            <TextView
-                android:id="@+id/nameColumn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#6750A4"
-                android:text="@string/product_name_column"
-                android:textAlignment="center"
-                android:textColor="@color/white" />
+                <TextView
+                    android:id="@+id/amountColumn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#6750A4"
+                    android:text="@string/amount_column"
+                    android:textAlignment="center"
+                    android:textColor="@color/white" />
 
-            <TextView
-                android:id="@+id/placeColumn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#6750A4"
-                android:text="@string/place_column"
-                android:textAlignment="center"
-                android:textColor="@color/white" />
+                <TextView
+                    android:id="@+id/nameColumn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#6750A4"
+                    android:text="@string/product_name_column"
+                    android:textAlignment="center"
+                    android:textColor="@color/white" />
 
-            <TextView
-                android:id="@+id/actualCostColumn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#6750A4"
-                android:text="@string/price_column"
-                android:textAlignment="center"
-                android:textColor="@color/white" />
-        </TableRow>
+                <TextView
+                    android:id="@+id/porcentageColumn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#6750A4"
+                    android:text="@string/place_column"
+                    android:textAlignment="center"
+                    android:textColor="@color/white" />
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#0E0C0C">
+                <TextView
+                    android:id="@+id/actualCostColumn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#6750A4"
+                    android:text="@string/price_column"
+                    android:textAlignment="center"
+                    android:textColor="@color/white" />
+            </TableRow>
 
-            <TextView
-                android:id="@+id/textView7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="1"
-                android:textAlignment="center"
-                android:textColor="@color/white" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#0E0C0C">
 
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Yerba Rosamonte x 500grs"
-                android:textAlignment="center"
-                android:textColor="@color/white" />
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="1"
+                    android:textAlignment="center"
+                    android:textColor="@color/white" />
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="General"
-                android:textAlignment="center"
-                android:textColor="@color/white" />
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="155dp"
+                    android:layout_height="match_parent"
+                    android:text="Yerba Rosamonte x 500grs"
+                    android:textAlignment="center"
+                    android:textColor="@color/white" />
 
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="1590"
-                android:textAlignment="center"
-                android:textColor="@color/white" />
-        </TableRow>
+                <AutoCompleteTextView
+                    android:id="@+id/column1BuyPlace"
+                    style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:maxWidth="90dp"
+                    android:text="Maxiconsumo"
+                    android:dropDownWidth="match_parent"
+                    android:textColor="@color/white" />
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#CC100F0F">
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="1590"
+                    android:textAlignment="center"
+                    android:textColor="@color/white" />
+            </TableRow>
 
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="1"
-                android:textAlignment="center"
-                android:textColor="@color/white" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#CC100F0F">
 
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Yerba Rosamonte x 500grs"
-                android:textAlignment="center"
-                android:textColor="@color/white" />
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="1"
+                    android:textAlignment="center"
+                    android:textColor="@color/white" />
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Dulcenter"
-                android:textAlignment="center"
-                android:textColor="@color/white" />
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Yerba Rosamonte x 500grs"
+                    android:textAlignment="center"
+                    android:textColor="@color/white" />
 
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="1590"
-                android:textAlignment="center"
-                android:textColor="@color/white" />
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteTextView2"
+                    style="@style/MaterialAlertDialog.Material3.Body.Text.CenterStacked"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:dropDownWidth="match_parent"
+                    android:maxWidth="90dp"
+                    android:text="Dulcenter"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
 
-        </TableRow>
-    </TableLayout>
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="1590"
+                    android:textAlignment="center"
+                    android:textColor="@color/white" />
+
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+
 </LinearLayout>
