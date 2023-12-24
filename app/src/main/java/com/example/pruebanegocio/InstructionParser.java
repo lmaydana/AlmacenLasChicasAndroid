@@ -2,6 +2,7 @@ package com.example.pruebanegocio;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class InstructionParser {
 
@@ -9,17 +10,21 @@ public class InstructionParser {
 
     MySqlConnection connection;
 
+    String where;
+
+    String order;
+
     ArrayList<String> innecesaryWordsForProductName;
 
-    public InstructionParser(String instruction, MySqlConnection connection){
+    public InstructionParser(String instruction, MySqlConnection connection) {
         this.instruction = instruction;
         this.connection = connection;
-
+        this.order = this.instruction.split(" ")[0];
         this.innecesaryWordsForProductName = new ArrayList<>();
-        innecesaryWordsForProductName.add("$"+this.getPriceOrPorcentage());
-        innecesaryWordsForProductName.add(this.getPriceOrPorcentage()+" pesos");
-        innecesaryWordsForProductName.add(this.getPriceOrPorcentage()+"%");
-        innecesaryWordsForProductName.add(this.getPriceOrPorcentage()+" porciento");
+        innecesaryWordsForProductName.add("$" + this.getPriceOrPorcentage());
+        innecesaryWordsForProductName.add(this.getPriceOrPorcentage() + " pesos");
+        innecesaryWordsForProductName.add(this.getPriceOrPorcentage() + "%");
+        innecesaryWordsForProductName.add(this.getPriceOrPorcentage() + " porciento");
         innecesaryWordsForProductName.add(" en un ");
         innecesaryWordsForProductName.add(" en ");
         innecesaryWordsForProductName.add(" el ");
@@ -27,54 +32,64 @@ public class InstructionParser {
         innecesaryWordsForProductName.add(" a ");
         innecesaryWordsForProductName.add(" un ");
         innecesaryWordsForProductName.add(" una ");
+        this.where = this.getQueryWhere(this.order);
     }
 
-    public String getCorrectInstruction(){
-        String query = "";
-        String order = this.instruction.split(" ")[0];
-        ArrayList<String> specialCharacterForms = new ArrayList<>();
-        switch (order) {
+    public String getCorrectInstruction() {
+        String newPrice = "";
+
+        switch (order){
             case "cambiar":
-                specialCharacterForms.add("$");
-                specialCharacterForms.add("pesos");
-                query = this.updateProductPrice(order, specialCharacterForms, this.getPriceOrPorcentage(), "AND");
+                newPrice = this.getPriceOrPorcentage();
                 break;
             case "aumentar":
-                specialCharacterForms.add("%");
-                specialCharacterForms.add("porcentaje");
-                Double porcentage = 1 + Double.parseDouble(this.getPriceOrPorcentage())/100;
-                query = this.updateProductPrice(order, specialCharacterForms, "precio*"+porcentage, "OR");
+                Double porcentage = 1 + Double.parseDouble(this.getPriceOrPorcentage()) / 100;
+                newPrice = "precio*" + porcentage;
         }
 
-       return query;
+        System.out.println("La consulta es: " + "UPDATE productos SET precio = " + newPrice + " WHERE " + this.where);
+
+        return "UPDATE productos SET precio = " + newPrice + " WHERE " + this.where;
     }
 
-    private String updateProductPrice(String order, ArrayList<String> specialCharacterForms, String newPrice, String connector){
+    public void setWhere(String where){
+        this.where = where;
+    }
+
+    public void  doTheInstruction(){
+        this.connection.mysqlQueryWithoutResponse(this.getCorrectInstruction());
+    }
+
+    public ArrayList<HashMap<String, String>> getProductsThatWillBeModified(){
+        String order = this.instruction.split(" ")[0];
+        ArrayList<HashMap<String, String>> obtainedObjects = this.connection.mysqlQueryToArrayListOfObjects("SELECT * FROM productos WHERE " + this.getQueryWhere(order));
+        return obtainedObjects;
+    }
+
+    private String getCorrectQuery(ArrayList<String> specialCharacterForms, String newPrice) {
         String query = "";
-        if( this.instructionContainsSomeoneOfTheseWords(specialCharacterForms) ){
-            ArrayList<String> separatedProductName = this.getProductName(order);
-            query = "UPDATE productos SET precio = " + newPrice + " WHERE ";
-            for (String partOfProducName: separatedProductName){
-                System.out.println("Parte del nombre: " + partOfProducName);
-                query += "nombre LIKE '%" + partOfProducName.toLowerCase()+ "%' "+connector+" ";
-            }
-            query = query.substring(0, query.length()-4);
-            System.out.println("La consulta quedo como: " + query);
-        }
+
+        query = "UPDATE productos SET precio = " + newPrice + " WHERE " + this.where;
+        System.out.println("La consulta quedo como: " + query);
+
         return query;
     }
 
-    private boolean instructionContainsSomeoneOfTheseWords(ArrayList<String> words){
-        boolean contain = false;
-        for (String word: words){
-            if( this.instruction.contains(word) ){
-                contain = true;
-            }
+    private String getQueryWhere(String order){
+        HashMap<String, String> connectors = new HashMap<>();
+        connectors.put("cambiar", "AND");
+        connectors.put("aumentar", "OR");
+        String where = "";
+        ArrayList<String> separatedProductName = this.getProductName(order);
+        for (String partOfProducName : separatedProductName) {
+            System.out.println("Parte del nombre: " + partOfProducName);
+            where += "nombre LIKE '%" + partOfProducName.toLowerCase() + "%' " + connectors.get(order) + " ";
         }
-        return contain;
+        where = where.substring(0, where.length() - 4);
+        return where;
     }
 
-    private String getPriceOrPorcentage(){
+    public String getPriceOrPorcentage(){
 
         int lastPriceIndex = this.instruction.length()-1;
 

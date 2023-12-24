@@ -1,12 +1,12 @@
 package com.example.pruebanegocio;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CrudActivity extends AppCompatActivity {
 
@@ -28,8 +28,24 @@ public class CrudActivity extends AppCompatActivity {
             MySqlConnection mySqlConnection = new MySqlConnection();
             InstructionParser parser = new InstructionParser(listenedWords, mySqlConnection);
             String query = parser.getCorrectInstruction();
-            mySqlConnection.mysqlQueryWithoutResponse( query );
+
+            /*ArrayList<HashMap<String,String>> productsThatWillBeModified = parser.getProductsThatWillBeModified();
+            if( productsThatWillBeModified.size() > 1 ){
+                ArrayList<String> codesForTheProductsToModify = lauchProductSelectIntent();
+                String where = getWhere(codesForTheProductsToModify);
+                parser.setWhere(where);
+            }else {
+                mySqlConnection.mysqlQueryWithoutResponse(query);
+            }*/
         }));
+    }
+
+    private String getWhere(ArrayList<String> codesForTheProductsToModify) {
+        return "";
+    }
+
+    private ArrayList<String> lauchProductSelectIntent() {
+        return null;
     }
 
 
