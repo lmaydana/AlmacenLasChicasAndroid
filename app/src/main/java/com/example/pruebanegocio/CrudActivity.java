@@ -25,6 +25,10 @@ public class CrudActivity extends AppCompatActivity {
             ArrayList<String> listenedWordsArray = result.getData() != null ? result.getData().getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS) : new ArrayList<>();
             String listenedWords = listenedWordsArray.get(0);
             System.out.println("Palabras escuchadas:" + listenedWords);
+            MySqlConnection mySqlConnection = new MySqlConnection();
+            InstructionParser parser = new InstructionParser(listenedWords, mySqlConnection);
+            String query = parser.getCorrectInstruction();
+            mySqlConnection.mysqlQueryWithoutResponse( query );
         }));
     }
 
