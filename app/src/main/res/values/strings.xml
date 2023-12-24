@@ -11,6 +11,9 @@
     <string name="search_mode">Modo Busqueda</string>
     <string name="code_column">Código</string>
     <string name="porcentage_column">Porcentaje</string>
+    <string name="select_correct_product">El cambio de precio va a afectar a estos productos. Si buscaba un produto o unos productos en particular, dejelo/s marcado/s con la casilla de la derecha del nombre del producto y presione el boton \"Cambiar Seleccionados\"</string>
+    <string name="change_selected_products">Cambiar Seleccionados</string>
+    <string name="cancel">cancelar</string>
     <string-array name="buy_places">
         <item>Dulcenter</item>
         <item>Dulcenter</item>

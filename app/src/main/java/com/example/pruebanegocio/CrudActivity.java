@@ -1,12 +1,15 @@
 package com.example.pruebanegocio;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class CrudActivity extends AppCompatActivity {
 
@@ -25,28 +28,19 @@ public class CrudActivity extends AppCompatActivity {
             ArrayList<String> listenedWordsArray = result.getData() != null ? result.getData().getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS) : new ArrayList<>();
             String listenedWords = listenedWordsArray.get(0);
             System.out.println("Palabras escuchadas:" + listenedWords);
-            MySqlConnection mySqlConnection = new MySqlConnection();
-            InstructionParser parser = new InstructionParser(listenedWords, mySqlConnection);
-            String query = parser.getCorrectInstruction();
+            lauchProductSelectIntent(listenedWords);
 
-            /*ArrayList<HashMap<String,String>> productsThatWillBeModified = parser.getProductsThatWillBeModified();
-            if( productsThatWillBeModified.size() > 1 ){
-                ArrayList<String> codesForTheProductsToModify = lauchProductSelectIntent();
-                String where = getWhere(codesForTheProductsToModify);
-                parser.setWhere(where);
-            }else {
-                mySqlConnection.mysqlQueryWithoutResponse(query);
-            }*/
         }));
     }
 
-    private String getWhere(ArrayList<String> codesForTheProductsToModify) {
-        return "";
+    private void lauchProductSelectIntent(String listenedWords) {
+        Intent changeProductIntent = new Intent(this, ChangeSelectedActivity.class);
+        changeProductIntent.putExtra("listenedWords", listenedWords);
+        startActivity(changeProductIntent);
     }
 
-    private ArrayList<String> lauchProductSelectIntent() {
-        return null;
-    }
+
+
 
 
 }

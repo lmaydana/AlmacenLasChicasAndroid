@@ -8,30 +8,27 @@ public class InstructionParser {
 
     String instruction;
 
-    MySqlConnection connection;
-
     String where;
 
     String order;
 
     ArrayList<String> innecesaryWordsForProductName;
 
-    public InstructionParser(String instruction, MySqlConnection connection) {
+    public InstructionParser(String instruction) {
         this.instruction = instruction;
-        this.connection = connection;
         this.order = this.instruction.split(" ")[0];
         this.innecesaryWordsForProductName = new ArrayList<>();
         innecesaryWordsForProductName.add("$" + this.getPriceOrPorcentage());
-        innecesaryWordsForProductName.add(this.getPriceOrPorcentage() + " pesos");
         innecesaryWordsForProductName.add(this.getPriceOrPorcentage() + "%");
-        innecesaryWordsForProductName.add(this.getPriceOrPorcentage() + " porciento");
-        innecesaryWordsForProductName.add(" en un ");
-        innecesaryWordsForProductName.add(" en ");
-        innecesaryWordsForProductName.add(" el ");
-        innecesaryWordsForProductName.add(" la ");
-        innecesaryWordsForProductName.add(" a ");
-        innecesaryWordsForProductName.add(" un ");
-        innecesaryWordsForProductName.add(" una ");
+        innecesaryWordsForProductName.add("porciento");
+        innecesaryWordsForProductName.add("pesos");
+        innecesaryWordsForProductName.add("" + this.getPriceOrPorcentage());
+        innecesaryWordsForProductName.add("en");
+        innecesaryWordsForProductName.add("el");
+        innecesaryWordsForProductName.add("la");
+        innecesaryWordsForProductName.add("a");
+        innecesaryWordsForProductName.add("un");
+        innecesaryWordsForProductName.add("una");
         this.where = this.getQueryWhere(this.order);
     }
 
@@ -56,13 +53,12 @@ public class InstructionParser {
         this.where = where;
     }
 
-    public void  doTheInstruction(){
-        this.connection.mysqlQueryWithoutResponse(this.getCorrectInstruction());
-    }
 
-    public ArrayList<HashMap<String, String>> getProductsThatWillBeModified(){
+
+    public ArrayList<HashMap<String, String>> getProductsThatPossiblyWillBeModified(){
         String order = this.instruction.split(" ")[0];
-        ArrayList<HashMap<String, String>> obtainedObjects = this.connection.mysqlQueryToArrayListOfObjects("SELECT * FROM productos WHERE " + this.getQueryWhere(order));
+        MySqlConnection mySqlConnection = new MySqlConnection();
+        ArrayList<HashMap<String, String>> obtainedObjects = mySqlConnection.mysqlQueryToArrayListOfObjects("SELECT * FROM productos WHERE " + this.getQueryWhere(order));
         return obtainedObjects;
     }
 
@@ -108,14 +104,13 @@ public class InstructionParser {
     private ArrayList<String> getProductName(String action){
 
         String instructionCopy = String.copyValueOf(this.instruction.toCharArray());
-        instructionCopy = instructionCopy.replace(action, "");
+        ArrayList<String> partsOfTheProductName = new ArrayList<>(Arrays.asList(instructionCopy.split(" ")));
+        partsOfTheProductName.remove(action);
         for (String word: innecesaryWordsForProductName) {
-            instructionCopy = instructionCopy.replaceAll(word, "");
-            instructionCopy = instructionCopy.replace(word, "");
-            System.out.println("Palabra a cambiar: "+word+", Resultado:"+instructionCopy);
+            partsOfTheProductName.remove(word);
+            System.out.println("Array a String: " + partsOfTheProductName.toString() + ", Palabra borrada: " + word);
         }
 
-        ArrayList<String> partsOfTheProductName = new ArrayList<>(Arrays.asList(instructionCopy.split(" ")));
         partsOfTheProductName.remove("");
         return partsOfTheProductName;
     }

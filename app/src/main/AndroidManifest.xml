@@ -26,10 +26,12 @@
         </activity>
         <activity
             android:name=".RequestsActivity"
-            ></activity>
+            />
         <activity
             android:name=".CrudActivity"
-            ></activity>
+            />
+        <activity android:name=".ChangeSelectedActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"/>
         <activity android:name=".CaptureActivityPortrait"
             android:screenOrientation="fullSensor"
             android:theme="@style/zxing_CaptureTheme"
