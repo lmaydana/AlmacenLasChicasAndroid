@@ -16,13 +16,15 @@ public class AddProductActivity extends AppCompatActivity {
         TextInputEditText nameET = findViewById(R.id.productNameET);
         TextInputEditText priceET = findViewById(R.id.priceET);
         TextInputEditText porcentageET = findViewById(R.id.porcentageET);
+        TextInputEditText descriptionET = findViewById(R.id.descriptionET);
         String productBarcode = getIntent().getExtras().getString("barcode");
         addProductButton.setOnClickListener(view -> {
             String productName = nameET.getText().toString();
             String productPrice = priceET.getText().toString();
             String productPorcentage = porcentageET.getText().toString();
+            String productDescription = descriptionET.getText().toString();
             MySqlConnection mySqlConnection = new MySqlConnection();
-            mySqlConnection.mysqlQueryWithoutResponse("INSERT INTO productos (codigo,nombre, precio, porcentaje) VALUES ("+productBarcode+",'"+productName+"',"+productPrice+","+productPorcentage+")");
+            mySqlConnection.mysqlQueryWithoutResponse("INSERT INTO productos (codigo,nombre, precio, porcentaje, descripcion) VALUES ("+productBarcode+",'"+productName+"',"+productPrice+","+productPorcentage+",'"+productName+" "+productDescription+"')");
             finish();
         });
     }

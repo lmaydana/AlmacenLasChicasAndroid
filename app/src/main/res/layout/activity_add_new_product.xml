@@ -37,6 +37,17 @@
             android:hint="@string/porcentage_hint" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/descriptionET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/description_hint" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <Button
         android:id="@+id/addProductBtn"
         android:layout_width="match_parent"

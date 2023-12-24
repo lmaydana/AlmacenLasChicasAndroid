@@ -12,23 +12,23 @@ public class InstructionParser {
 
     String order;
 
-    ArrayList<String> innecesaryWordsForProductName;
+    ArrayList<String> innecesaryWordsForProductDescription;
 
     public InstructionParser(String instruction) {
         this.instruction = instruction;
         this.order = this.instruction.split(" ")[0];
-        this.innecesaryWordsForProductName = new ArrayList<>();
-        innecesaryWordsForProductName.add("$" + this.getPriceOrPorcentage());
-        innecesaryWordsForProductName.add(this.getPriceOrPorcentage() + "%");
-        innecesaryWordsForProductName.add("porciento");
-        innecesaryWordsForProductName.add("pesos");
-        innecesaryWordsForProductName.add("" + this.getPriceOrPorcentage());
-        innecesaryWordsForProductName.add("en");
-        innecesaryWordsForProductName.add("el");
-        innecesaryWordsForProductName.add("la");
-        innecesaryWordsForProductName.add("a");
-        innecesaryWordsForProductName.add("un");
-        innecesaryWordsForProductName.add("una");
+        this.innecesaryWordsForProductDescription = new ArrayList<>();
+        innecesaryWordsForProductDescription.add("$" + this.getPriceOrPorcentage());
+        innecesaryWordsForProductDescription.add(this.getPriceOrPorcentage() + "%");
+        innecesaryWordsForProductDescription.add("porciento");
+        innecesaryWordsForProductDescription.add("pesos");
+        innecesaryWordsForProductDescription.add("" + this.getPriceOrPorcentage());
+        innecesaryWordsForProductDescription.add("en");
+        innecesaryWordsForProductDescription.add("el");
+        innecesaryWordsForProductDescription.add("la");
+        innecesaryWordsForProductDescription.add("a");
+        innecesaryWordsForProductDescription.add("un");
+        innecesaryWordsForProductDescription.add("una");
         this.where = this.getQueryWhere(this.order);
     }
 
@@ -62,24 +62,15 @@ public class InstructionParser {
         return obtainedObjects;
     }
 
-    private String getCorrectQuery(ArrayList<String> specialCharacterForms, String newPrice) {
-        String query = "";
-
-        query = "UPDATE productos SET precio = " + newPrice + " WHERE " + this.where;
-        System.out.println("La consulta quedo como: " + query);
-
-        return query;
-    }
-
     private String getQueryWhere(String order){
         HashMap<String, String> connectors = new HashMap<>();
         connectors.put("cambiar", "AND");
         connectors.put("aumentar", "OR");
         String where = "";
-        ArrayList<String> separatedProductName = this.getProductName(order);
-        for (String partOfProducName : separatedProductName) {
-            System.out.println("Parte del nombre: " + partOfProducName);
-            where += "nombre LIKE '%" + partOfProducName.toLowerCase() + "%' " + connectors.get(order) + " ";
+        ArrayList<String> separatedProductDescription = this.getProductDescription(order);
+        for (String partOfProductDescription : separatedProductDescription) {
+            System.out.println("Parte de la descripcion: " + partOfProductDescription);
+            where += "descripcion LIKE '%" + partOfProductDescription.toLowerCase() + "%' " + connectors.get(order) + " ";
         }
         where = where.substring(0, where.length() - 4);
         return where;
@@ -101,17 +92,17 @@ public class InstructionParser {
         return this.instruction.substring(firstPriceIndex+1, lastPriceIndex+1);
     }
 
-    private ArrayList<String> getProductName(String action){
+    private ArrayList<String> getProductDescription(String action){
 
         String instructionCopy = String.copyValueOf(this.instruction.toCharArray());
-        ArrayList<String> partsOfTheProductName = new ArrayList<>(Arrays.asList(instructionCopy.split(" ")));
-        partsOfTheProductName.remove(action);
-        for (String word: innecesaryWordsForProductName) {
-            partsOfTheProductName.remove(word);
-            System.out.println("Array a String: " + partsOfTheProductName.toString() + ", Palabra borrada: " + word);
+        ArrayList<String> partsOfTheProductDescription = new ArrayList<>(Arrays.asList(instructionCopy.split(" ")));
+        partsOfTheProductDescription.remove(action);
+        for (String word: innecesaryWordsForProductDescription) {
+            partsOfTheProductDescription.remove(word);
+            System.out.println("Array a String: " + partsOfTheProductDescription + ", Palabra borrada: " + word);
         }
 
-        partsOfTheProductName.remove("");
-        return partsOfTheProductName;
+        partsOfTheProductDescription.remove("");
+        return partsOfTheProductDescription;
     }
 }
