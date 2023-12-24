@@ -14,6 +14,10 @@
     <string name="select_correct_product">El cambio de precio va a afectar a estos productos. Si buscaba un produto o unos productos en particular, dejelo/s marcado/s con la casilla de la derecha del nombre del producto y presione el boton \"Cambiar Seleccionados\"</string>
     <string name="change_selected_products">Cambiar Seleccionados</string>
     <string name="cancel">cancelar</string>
+    <string name="add_new_product_button">Agregar producto</string>
+    <string name="name_hint">Nombre de producto</string>
+    <string name="price_hint">Precio</string>
+    <string name="porcentage_hint">Porcentaje de ganancia</string>
     <string-array name="buy_places">
         <item>Dulcenter</item>
         <item>Dulcenter</item>

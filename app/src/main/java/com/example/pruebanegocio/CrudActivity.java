@@ -20,7 +20,9 @@ public class CrudActivity extends AppCompatActivity {
         Button addProductButton = findViewById(R.id.addProduct);
         addProductButton.setOnClickListener(new BarCodeEvent(this, result->{
             String barcode = result.getContents();
-            System.out.println("EL CODIGO: "+ barcode);
+            Intent addProductActivity = new Intent(this, AddProductActivity.class);
+           addProductActivity.putExtra("barcode", barcode);
+           startActivity(addProductActivity);
         }));
 
         Button microButton = findViewById(R.id.microButton);

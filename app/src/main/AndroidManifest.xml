@@ -28,6 +28,10 @@
             android:name=".RequestsActivity"
             />
         <activity
+            android:name=".AddProductActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"
+            />
+        <activity
             android:name=".CrudActivity"
             />
         <activity android:name=".ChangeSelectedActivity"
