@@ -14,9 +14,15 @@ public class InstructionParser {
 
     ArrayList<String> innecesaryWordsForProductDescription;
 
-    public InstructionParser(String instruction) {
+    public InstructionParser(String instruction) throws BadOrderException {
+        ArrayList<String> orders = new ArrayList<>();
+        orders.add("cambiar");
+        orders.add("aumentar");
         this.instruction = instruction;
         this.order = this.instruction.split(" ")[0];
+        if( !orders.contains(order) ){
+            throw new BadOrderException("Eso no es una orden.");
+        }
         this.innecesaryWordsForProductDescription = new ArrayList<>();
         innecesaryWordsForProductDescription.add("$" + this.getPriceOrPorcentage());
         innecesaryWordsForProductDescription.add(this.getPriceOrPorcentage() + "%");
@@ -29,6 +35,8 @@ public class InstructionParser {
         innecesaryWordsForProductDescription.add("a");
         innecesaryWordsForProductDescription.add("un");
         innecesaryWordsForProductDescription.add("una");
+        innecesaryWordsForProductDescription.add("lo");
+        innecesaryWordsForProductDescription.add("de");
         this.where = this.getQueryWhere(this.order);
     }
 

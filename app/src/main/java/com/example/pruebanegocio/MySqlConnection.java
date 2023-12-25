@@ -23,11 +23,11 @@ import java.util.concurrent.ExecutionException;
 public class MySqlConnection extends Activity {
 
     ClassConnection conn;
+
+    private final String URL = "http://186.123.109.86:8888/almacen/json_de_productos.php?query=";
     public MySqlConnection(){
 
         conn = new ClassConnection();
-
-
     }
 
     public ArrayList<HashMap<String, String>> mysqlQueryToArrayListOfObjects(String query){
@@ -56,7 +56,7 @@ public class MySqlConnection extends Activity {
     private String getResponse(String query){
         String response = "";
         try {
-            response = conn.execute("http://186.123.109.86:8888/almacen/json_de_productos.php?query="+query).get();
+            response = conn.execute(URL+query).get();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }

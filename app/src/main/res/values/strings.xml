@@ -3,7 +3,7 @@
     <string name="requests">Pedidos</string>
     <string name="new_product">Nuevo producto</string>
     <string name="amount_column">Cantidad</string>
-    <string name="product_name_column">Nombre de producto</string>
+    <string name="product_name_column">Nombre</string>
     <string name="price_column">Precio actual</string>
     <string name="place_column">Lugar</string>
     <string name="amount_edit_text">Cantidad</string>

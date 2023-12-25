@@ -20,23 +20,30 @@ public class ChangeSelectedActivity extends AppCompatActivity {
         ListView productsList = findViewById(R.id.productsToChoice);
         Button changeSelectsButton = findViewById(R.id.changeSelecteds);
         String listenedWords = getIntent().getExtras().getString("listenedWords");
-        InstructionParser parser = new InstructionParser(listenedWords);
+        InstructionParser parser = null;
+        try {
+            parser = new InstructionParser(listenedWords);
+        } catch (BadOrderException e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            finish();
+        }
         ArrayList<HashMap<String,String>> productsThatPossiblyWillBeModified = parser.getProductsThatPossiblyWillBeModified();
 
         if( productsThatPossiblyWillBeModified.size() == 0 ){
-            Toast.makeText(this, "No se encontro ningun producto para modificar." ,Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No se encontró ningún producto para modificar." ,Toast.LENGTH_SHORT).show();
             finish();
         }
 
         ArrayList<String> productsNamesThatPossiblyWillBeModified = this.getProductsNames(productsThatPossiblyWillBeModified);
         loadListOfProducts(productsList, productsNamesThatPossiblyWillBeModified);
 
+        InstructionParser finalParser = parser;
         changeSelectsButton.setOnClickListener(view -> {
             MySqlConnection mySqlConnectionInternal = new MySqlConnection();
             String where = getWhere();
-            parser.setWhere(where);
-            System.out.println("La instruccion resultante fue: " + parser.getCorrectInstruction());
-            mySqlConnectionInternal.mysqlQueryWithoutResponse(parser.getCorrectInstruction());
+            finalParser.setWhere(where);
+            System.out.println("La instrucción resultante fue: " + finalParser.getCorrectInstruction());
+            mySqlConnectionInternal.mysqlQueryWithoutResponse(finalParser.getCorrectInstruction());
             finish();
         });
 
