@@ -19,38 +19,40 @@ public class ChangeSelectedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_select_product_from_ambiguous_request);
         ListView productsList = findViewById(R.id.productsToChoice);
         Button changeSelectsButton = findViewById(R.id.changeSelecteds);
-        String listenedWords = getIntent().getExtras().getString("listenedWords");
-        InstructionParser parser = null;
+        final String listenedWords = getIntent().getExtras().getString("listenedWords");
+        final InstructionParser parser = new InstructionParser();
         try {
-            parser = new InstructionParser(listenedWords);
+            ArrayList<HashMap<String,String>> productsThatPossiblyWillBeModified = parser.getProductsThatPossiblyWillBeModified(listenedWords);
+
+            if( productsThatPossiblyWillBeModified.size() == 0 ){
+                Toast.makeText(this, "No se encontró ningún producto para modificar." ,Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+            ArrayList<String> productsNamesThatPossiblyWillBeModified = this.getProductsNames(productsThatPossiblyWillBeModified);
+            loadListOfProducts(productsList, productsNamesThatPossiblyWillBeModified);
+
+
+            changeSelectsButton.setOnClickListener(view -> {
+                MySqlConnection mySqlConnectionInternal = new MySqlConnection();
+                String where = getWhere();
+                parser.setWhere(where);
+                try {
+                    mySqlConnectionInternal.mysqlQueryWithoutResponse(parser.getCorrectInstruction(listenedWords));
+                } catch (BadOrderException e) {
+                    Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                finish();
+            });
+
+            Button cancelButton = findViewById(R.id.cancel);
+            cancelButton.setOnClickListener(view -> {
+                finish();
+            });
         } catch (BadOrderException e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             finish();
         }
-        ArrayList<HashMap<String,String>> productsThatPossiblyWillBeModified = parser.getProductsThatPossiblyWillBeModified();
-
-        if( productsThatPossiblyWillBeModified.size() == 0 ){
-            Toast.makeText(this, "No se encontró ningún producto para modificar." ,Toast.LENGTH_SHORT).show();
-            finish();
-        }
-
-        ArrayList<String> productsNamesThatPossiblyWillBeModified = this.getProductsNames(productsThatPossiblyWillBeModified);
-        loadListOfProducts(productsList, productsNamesThatPossiblyWillBeModified);
-
-        InstructionParser finalParser = parser;
-        changeSelectsButton.setOnClickListener(view -> {
-            MySqlConnection mySqlConnectionInternal = new MySqlConnection();
-            String where = getWhere();
-            finalParser.setWhere(where);
-            System.out.println("La instrucción resultante fue: " + finalParser.getCorrectInstruction());
-            mySqlConnectionInternal.mysqlQueryWithoutResponse(finalParser.getCorrectInstruction());
-            finish();
-        });
-
-        Button cancelButton = findViewById(R.id.cancel);
-        cancelButton.setOnClickListener(view -> {
-            finish();
-        });
     }
 
     private ArrayList<String> getProductsNames(ArrayList<HashMap<String,String>> productsThatWillBeModified){
