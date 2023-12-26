@@ -33,6 +33,10 @@
             android:name=".RequestsActivity"
             />
         <activity
+            android:name=".RequestBindingProductActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"
+            />
+        <activity
             android:name=".AddProductActivity"
             android:theme="@style/Theme.AppCompat.Light.Dialog"
             />

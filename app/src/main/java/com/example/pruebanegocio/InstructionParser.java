@@ -44,6 +44,7 @@ public class InstructionParser {
                 Double porcentage = 1 + Double.parseDouble(newPrice) / 100;
                 newPrice = "precio*" + porcentage;
                 break;
+
         }
 
         System.out.println("La consulta es: " + "UPDATE productos SET precio = " + newPrice + " WHERE " + this.where + " COLLATE utf8_bin");
@@ -118,10 +119,9 @@ public class InstructionParser {
         String instructionCopy = String.copyValueOf(instruction.toCharArray());
         ArrayList<String> partsOfTheProductDescription = new ArrayList<>(Arrays.asList(instructionCopy.split(" ")));
         partsOfTheProductDescription.remove(order);
-        for (String word: innecesaryWordsForProductDescription) {
-            partsOfTheProductDescription.remove(word);
-            //System.out.println("Array a String: " + partsOfTheProductDescription + ", Palabra borrada: " + word);
-        }
+        partsOfTheProductDescription.removeAll(this.innecesaryWordsForProductDescription);
+
+        System.out.println("Array a String: " + partsOfTheProductDescription);
 
         partsOfTheProductDescription.remove("");
         return partsOfTheProductDescription;

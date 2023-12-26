@@ -1,6 +1,7 @@
 package com.example.pruebanegocio;
 
 import android.view.View;
+import android.widget.AdapterView;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -33,4 +34,5 @@ public class BarCodeEvent implements View.OnClickListener {
         options.setBarcodeImageEnabled(false);
         barcodeLauncher.launch(options);
     }
+
 }

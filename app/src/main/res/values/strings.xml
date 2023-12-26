@@ -19,6 +19,7 @@
     <string name="price_hint">Precio</string>
     <string name="porcentage_hint">Porcentaje de ganancia</string>
     <string name="description_hint">Descripción del producto</string>
+    <string name="binding_product_description">Elija el producto que se va a relacionar con el pedido</string>
     <string-array name="buy_places">
         <item>Dulcenter</item>
         <item>Dulcenter</item>

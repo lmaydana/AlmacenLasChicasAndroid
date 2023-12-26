@@ -77,13 +77,21 @@ public class CrudActivity extends AppCompatActivity {
         String[] separatedKeyWords = keyWords.split(" ");
         String where = "";
         ArrayList<String> arrayListKeyWords = new ArrayList<>(Arrays.asList(separatedKeyWords));
+        ArrayList<String> innecesaryWordsForProductDescription = new ArrayList<>();
+        innecesaryWordsForProductDescription.add("en");
+        innecesaryWordsForProductDescription.add("el");
+        innecesaryWordsForProductDescription.add("la");
+        innecesaryWordsForProductDescription.add("a");
+        innecesaryWordsForProductDescription.add("un");
+        innecesaryWordsForProductDescription.add("una");
+        innecesaryWordsForProductDescription.add("lo");
+        innecesaryWordsForProductDescription.add("de");
+        arrayListKeyWords.removeAll(innecesaryWordsForProductDescription);
         for ( String keyWord : arrayListKeyWords){
             where+= "descripcion LIKE '%"+keyWord+"%' AND ";
         }
         return where.substring(0, where.length()-4);
     }
-
-
 
     private void loadProductsTable(ArrayList<HashMap<String,String>> products) {
         ArrayList<String> colors = new ArrayList<>();
@@ -124,9 +132,5 @@ public class CrudActivity extends AppCompatActivity {
         changeProductIntent.putExtra("listenedWords", listenedWords);
         startActivity(changeProductIntent);
     }
-
-
-
-
 
 }
