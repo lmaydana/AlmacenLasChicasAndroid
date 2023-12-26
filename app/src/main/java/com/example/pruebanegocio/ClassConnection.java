@@ -2,37 +2,42 @@ package com.example.pruebanegocio;
 
 import android.os.AsyncTask;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.util.ArrayList;
+
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 
 public class ClassConnection extends AsyncTask<String, String, String> {
     @Override
     protected String doInBackground(String... strings) {
-        StringBuffer buffer = new StringBuffer();
         try {
-            URL url = new URL(strings[0]);
-            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.connect();
-            int code = httpURLConnection.getResponseCode();
-            if( code == HttpURLConnection.HTTP_OK ){
-                InputStream in = new BufferedInputStream(httpURLConnection.getInputStream());
-                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-                String line="";
-                while( (line = reader.readLine()) != null ){
-                    buffer.append(line);
-                }
-            }
-        }catch (IOException e){
-            e.printStackTrace();
-            throw new RuntimeException();
+            return this.post(strings[0], strings[1]);
+        } catch (IOException e) {
+
+            throw new RuntimeException(e);
         }
 
-        return buffer.toString();
+    }
+
+    OkHttpClient client = new OkHttpClient();
+
+    String post(String url, String json) throws IOException {
+        ArrayList<String> names = new ArrayList<>();
+        names.add("query");
+        ArrayList<String> values = new ArrayList<>();
+        values.add(json);
+        RequestBody body = new FormBody(names,values);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+        try (Response response = client.newCall(request).execute()) {
+            return response.body().string();
+        }
     }
 }

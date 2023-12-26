@@ -7,6 +7,7 @@ import android.speech.RecognizerIntent;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.SearchView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class CrudActivity extends AppCompatActivity {
@@ -27,28 +29,63 @@ public class CrudActivity extends AppCompatActivity {
 
     private void setInitialThings(){
 
-        this.loadProductsTable();
+        MySqlConnection mySqlConnection = new MySqlConnection();
+        ArrayList<HashMap<String,String>> products = mySqlConnection.mysqlQueryToArrayListOfObjects("SELECT * FROM productos");
+        this.loadProductsTable(products);
 
         Button addProductButton = findViewById(R.id.addProduct);
         addProductButton.setOnClickListener(new BarCodeEvent(this, result->{
-            String barcode = result.getContents();
-            Intent addProductActivity = new Intent(this, AddProductActivity.class);
-            addProductActivity.putExtra("barcode", barcode);
-            startActivity(addProductActivity);
+            if( result.getContents() != null ) {
+                String barcode = result.getContents();
+                Intent addProductActivity = new Intent(this, AddProductActivity.class);
+                addProductActivity.putExtra("barcode", barcode);
+                startActivity(addProductActivity);
+            }
         }));
 
         Button microButton = findViewById(R.id.microButton);
         microButton.setOnClickListener(new MicroEvent(this, result -> {
             ArrayList<String> listenedWordsArray = result.getData() != null ? result.getData().getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS) : new ArrayList<>();
             String listenedWords = listenedWordsArray.get(0);
-            System.out.println("Palabras escuchadas:" + listenedWords);
+            //System.out.println("Palabras escuchadas:" + listenedWords);
             lauchProductSelectIntent(listenedWords);
         }));
+
+        SearchView productSearch = findViewById(R.id.searchBar);
+        productSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                MySqlConnection mySqlConnection = new MySqlConnection();
+                String where = getWhere(s);
+                ArrayList<HashMap<String,String>> products = mySqlConnection.mysqlQueryToArrayListOfObjects("SELECT * FROM productos WHERE " + where);
+                TableLayout productsTable = findViewById(R.id.productsTable);
+                productsTable.removeAllViews();
+                loadProductsTable(products);
+                return false;
+            }
+        });
+
+
     }
 
-    private void loadProductsTable() {
-        MySqlConnection mySqlConnection = new MySqlConnection();
-        ArrayList<HashMap<String,String>> products = mySqlConnection.mysqlQueryToArrayListOfObjects("SELECT * FROM productos");
+    private String getWhere(String keyWords){
+        String[] separatedKeyWords = keyWords.split(" ");
+        String where = "";
+        ArrayList<String> arrayListKeyWords = new ArrayList<>(Arrays.asList(separatedKeyWords));
+        for ( String keyWord : arrayListKeyWords){
+            where+= "descripcion LIKE '%"+keyWord+"%' AND ";
+        }
+        return where.substring(0, where.length()-4);
+    }
+
+
+
+    private void loadProductsTable(ArrayList<HashMap<String,String>> products) {
         ArrayList<String> colors = new ArrayList<>();
         colors.add("#0E0C0C");
         colors.add("#CC100F0F");

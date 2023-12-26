@@ -31,11 +31,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        MySqlConnection mySqlConnection = new MySqlConnection();
-        ArrayList<HashMap<String,String>> products = mySqlConnection.mysqlQueryToArrayListOfObjects("select * from productos");
-        for( HashMap<String, String> product : products ){
-            System.out.println("código: "+product.get("codigo")+", nombre: "+product.get("nombre")+", precio: "+ product.get("precio")+", porcentaje: "+product.get("porcentaje"));
-        }
     }
 
     public void startRequestsView(View view){

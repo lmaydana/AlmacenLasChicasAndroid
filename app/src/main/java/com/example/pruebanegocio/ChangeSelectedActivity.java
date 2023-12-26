@@ -89,7 +89,7 @@ public class ChangeSelectedActivity extends AppCompatActivity {
         for (int i = 0; i < productsList.getAdapter().getCount(); i++) {
             if( productsList.isItemChecked(i) ){
                 String selectedProduct = (String) productsList.getItemAtPosition(i);
-                System.out.println("El producto: " + selectedProduct + " está seleccionado.");
+                //System.out.println("El producto: " + selectedProduct + " está seleccionado.");
                 productNamesThatWillBeModified.add(selectedProduct);
             }
         }

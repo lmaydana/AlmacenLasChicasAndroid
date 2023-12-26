@@ -37,7 +37,7 @@ public class InstructionParser {
 
         String newPrice = this.getPriceOrPorcentage(instruction);
 
-        switch (order){
+        switch (order.toLowerCase()){
             case "cambiar":
                 break;
             case "aumentar":
@@ -46,9 +46,9 @@ public class InstructionParser {
                 break;
         }
 
-        System.out.println("La consulta es: " + "UPDATE productos SET precio = " + newPrice + " WHERE " + this.where);
+        System.out.println("La consulta es: " + "UPDATE productos SET precio = " + newPrice + " WHERE " + this.where + " COLLATE utf8_bin");
 
-        return "UPDATE productos SET precio = " + newPrice + " WHERE " + this.where;
+        return "UPDATE productos SET precio = " + newPrice + " WHERE " + this.where + " COLLATE utf8_bin";
     }
 
     private String getOrder(String instruction) throws BadOrderException {
@@ -60,10 +60,10 @@ public class InstructionParser {
     }
 
     public void setWhere(String where){
-        this.where = where;
+        this.where = where + " COLLATE utf8_bin";
     }
 
-    private void addInnecessaryWords(String instruction){
+    private void addInnecessaryWords(String instruction) throws BadOrderException {
         innecesaryWordsForProductDescription.add("$" + this.getPriceOrPorcentage(instruction));
         innecesaryWordsForProductDescription.add(this.getPriceOrPorcentage(instruction) + "%");
         innecesaryWordsForProductDescription.add("" + this.getPriceOrPorcentage(instruction));
@@ -72,8 +72,8 @@ public class InstructionParser {
     public ArrayList<HashMap<String, String>> getProductsThatPossiblyWillBeModified(String instruction) throws BadOrderException {
         this.addInnecessaryWords(instruction);
         MySqlConnection mySqlConnection = new MySqlConnection();
-        ArrayList<HashMap<String, String>> obtainedObjects = mySqlConnection.mysqlQueryToArrayListOfObjects("SELECT * FROM productos WHERE " + this.getQueryWhere(instruction));
         System.out.println("Consulta de productos a modificar:" + "SELECT * FROM productos WHERE " + this.getQueryWhere(instruction));
+        ArrayList<HashMap<String, String>> obtainedObjects = mySqlConnection.mysqlQueryToArrayListOfObjects("SELECT * FROM productos WHERE " + this.getQueryWhere(instruction));
         return obtainedObjects;
     }
 
@@ -85,19 +85,24 @@ public class InstructionParser {
         String where = "";
         ArrayList<String> separatedProductDescription = this.getProductDescription(instruction);
         for (String partOfProductDescription : separatedProductDescription) {
-            System.out.println("Parte de la descripcion: " + partOfProductDescription);
-            where += "descripcion LIKE '%" + partOfProductDescription.toLowerCase() + "%' " + connectors.get(order) + " ";
+            //System.out.println("Parte de la descripcion: " + partOfProductDescription);
+            where += "UPPER(descripcion) LIKE UPPER('%" + partOfProductDescription.toLowerCase() + "%') " + connectors.get(order) + " ";
         }
         where = where.substring(0, where.length() - 4);
+        where = where + " COLLATE utf8_bin";
         return where;
     }
 
-    private String getPriceOrPorcentage(String instruction){
+    private String getPriceOrPorcentage(String instruction) throws BadOrderException {
 
         int lastPriceIndex = instruction.length()-1;
 
-        while (!Character.isDigit(instruction.charAt(lastPriceIndex))){
+        while (!Character.isDigit(instruction.charAt(lastPriceIndex)) && lastPriceIndex > 0){
             lastPriceIndex--;
+        }
+
+        if( lastPriceIndex == 0 ){
+            throw new BadOrderException("No se encontro un numero que cuantifique la cantidad del cambio");
         }
 
         int firstPriceIndex = lastPriceIndex;
@@ -115,7 +120,7 @@ public class InstructionParser {
         partsOfTheProductDescription.remove(order);
         for (String word: innecesaryWordsForProductDescription) {
             partsOfTheProductDescription.remove(word);
-            System.out.println("Array a String: " + partsOfTheProductDescription + ", Palabra borrada: " + word);
+            //System.out.println("Array a String: " + partsOfTheProductDescription + ", Palabra borrada: " + word);
         }
 
         partsOfTheProductDescription.remove("");

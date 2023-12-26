@@ -24,7 +24,7 @@ public class MySqlConnection extends Activity {
 
     ClassConnection conn;
 
-    private final String URL = "http://186.123.109.86:8888/almacen/json_de_productos.php?query=";
+    private final String URL = "http://186.123.109.86:8888/almacen/json_de_productos.php";
     public MySqlConnection(){
 
         conn = new ClassConnection();
@@ -32,8 +32,10 @@ public class MySqlConnection extends Activity {
 
     public ArrayList<HashMap<String, String>> mysqlQueryToArrayListOfObjects(String query){
         ArrayList<HashMap<String,String>> objects = new ArrayList<>();
+        String response = getResponse(query);
+        System.out.println("Respuesta de la pagina: "+ response);
         try {
-            String response = getResponse(query);
+
             JSONArray jsonArray= new JSONArray(response);
 
             for( int index = 0; index < jsonArray.length(); index++) {
@@ -56,7 +58,7 @@ public class MySqlConnection extends Activity {
     private String getResponse(String query){
         String response = "";
         try {
-            response = conn.execute(URL+query).get();
+            response = conn.execute(URL, query).get();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }

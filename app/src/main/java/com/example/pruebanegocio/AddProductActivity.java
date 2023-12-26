@@ -16,6 +16,7 @@ public class AddProductActivity extends AppCompatActivity {
         TextInputEditText priceET = findViewById(R.id.priceET);
         TextInputEditText porcentageET = findViewById(R.id.porcentageET);
         TextInputEditText descriptionET = findViewById(R.id.descriptionET);
+
         String productBarcode = getIntent().getExtras().getString("barcode");
         addProductButton.setOnClickListener(view -> {
             String productName = nameET.getText().toString();
