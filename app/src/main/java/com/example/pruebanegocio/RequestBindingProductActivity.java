@@ -49,7 +49,8 @@ public class RequestBindingProductActivity extends AppCompatActivity {
             MySqlConnection mySqlConnectionSelect = new MySqlConnection();
             ArrayList<HashMap<String, String>> productsPrice = mySqlConnectionSelect.mysqlQueryToArrayListOfObjects("SELECT precio FROM productos WHERE nombre LIKE '%" + productName + "%'");
             MySqlConnection mySqlConnectionInsert = new MySqlConnection();
-           mySqlConnectionInsert.mysqlQueryWithoutResponse("INSERT INTO pedidos (pedido, proveedor, precio) VALUES ('" + request + "','" + provider + "'," + productsPrice.get(0).get("precio") + ")");
+            mySqlConnectionInsert.mysqlQueryWithoutResponse("INSERT INTO pedidos (pedido, proveedor, precio) VALUES ('" + request + "','" + provider + "'," + productsPrice.get(0).get("precio") + ")");
+            finish();
             //mySqlConnection.mysqlQueryWithoutResponse("INSERT INTO pedidos (pedido, proveedor, precio) VALUES ('" + request + "','" + provider + "'," + productsPrice.get(0).get("precio") + ")");
         });
 
@@ -90,9 +91,11 @@ public class RequestBindingProductActivity extends AppCompatActivity {
         MySqlConnection mySqlConnectionSelect = new MySqlConnection();
         ArrayList<HashMap<String,String>> obtainedProducts = mySqlConnectionSelect.mysqlQueryToArrayListOfObjects("SELECT nombre FROM productos WHERE " + this.getWhere(filteredWords));
 
-        for (int i =0; i<3 && obtainedProducts.size()==0; i++){
+        //System.out.println("LA consulta iterada es:SELECT nombre FROM productos WHERE " + this.getWhere(filteredWords));
+        for (int i =0; i<2 && obtainedProducts.size()==0; i++){
             filteredWords.remove(0);
             MySqlConnection mySqlConnectionInsert = new MySqlConnection();
+            //System.out.println("LA consulta iterada es:SELECT nombre FROM productos WHERE " + this.getWhere(filteredWords));
             obtainedProducts = mySqlConnectionInsert.mysqlQueryToArrayListOfObjects("SELECT nombre FROM productos WHERE " + this.getWhere(filteredWords));
         }
         return obtainedProducts;
@@ -101,7 +104,7 @@ public class RequestBindingProductActivity extends AppCompatActivity {
     private String getWhere(ArrayList<String> filteredWords){
         String where = "";
         for (String keyWord: filteredWords){
-            where += "descripcion LIKE '%"+keyWord+"%' AND ";
+            where += "(descripcion LIKE '%"+keyWord+"%' OR descripcion LIKE '"+keyWord+"%' OR descripcion LIKE '%"+keyWord+"') AND ";
         }
         return where.substring(0, where.length()-4);
     }

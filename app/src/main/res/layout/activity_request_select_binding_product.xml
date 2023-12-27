@@ -20,24 +20,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/changeSelectedsRequest"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="2dp"
-            android:layout_weight="1"
-            android:text="@string/change_selected_products"
-            app:cornerRadius="0dp" />
-
-        <Button
-            android:id="@+id/cancelRequest"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/cancel"
-            app:cornerRadius="0dp" />
-    </LinearLayout>
+        android:orientation="horizontal"/>
 
 </LinearLayout>

@@ -23,7 +23,8 @@
             android:id="@+id/priceET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/price_hint" />
+            android:hint="@string/price_hint"
+            android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -34,7 +35,8 @@
             android:id="@+id/porcentageET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/porcentage_hint" />
+            android:hint="@string/porcentage_hint"
+            android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout

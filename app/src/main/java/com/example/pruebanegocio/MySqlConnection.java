@@ -35,6 +35,7 @@ public class MySqlConnection extends Activity {
     public ArrayList<HashMap<String, String>> mysqlQueryToArrayListOfObjects(String query){
         ArrayList<HashMap<String,String>> objects = new ArrayList<>();
         String response = getResponse(query);
+        System.out.println("La constulta es:"+query);
         System.out.println("Respuesta de la pagina: "+ response);
         try {
 

@@ -87,11 +87,10 @@ public class InstructionParser {
         ArrayList<String> separatedProductDescription = this.getProductDescription(instruction);
         for (String partOfProductDescription : separatedProductDescription) {
             //System.out.println("Parte de la descripcion: " + partOfProductDescription);
-            where += "UPPER(descripcion) LIKE UPPER('%" + partOfProductDescription.toLowerCase() + "%') " + connectors.get(order) + " ";
+            where += "(UPPER(descripcion) LIKE UPPER('%" + partOfProductDescription + "%') OR UPPER(descripcion) LIKE UPPER('"+partOfProductDescription+"%') OR UPPER(descripcion) LIKE UPPER('%"+partOfProductDescription+"')) "+ connectors.get(order)+" " ;
+            //"(descripcion LIKE '%"+keyWord+"%' OR descripcion LIKE '"+keyWord+"%' OR descripcion LIKE '%"+keyWord+"') AND "
         }
-        where = where.substring(0, where.length() - 4);
-        where = where + " COLLATE utf8_bin";
-        return where;
+        return where.substring(0, where.length() - 4);
     }
 
     private String getPriceOrPorcentage(String instruction) throws BadOrderException {

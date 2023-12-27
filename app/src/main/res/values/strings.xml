@@ -20,8 +20,9 @@
     <string name="porcentage_hint">Porcentaje de ganancia</string>
     <string name="description_hint">Descripción del producto</string>
     <string name="binding_product_description">Elija el producto que se va a relacionar con el pedido</string>
+    <string name="providor_search_hint">Buscar por proveedor</string>
     <string-array name="buy_places">
-        <item>Dulcenter</item>
+        <item>General</item>
         <item>Dulcenter</item>
         <item>Brown</item>
         <item>Maxiconsumo</item>

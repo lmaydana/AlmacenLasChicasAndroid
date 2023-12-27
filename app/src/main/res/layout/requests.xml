@@ -7,46 +7,39 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/amount"
-                android:layout_width="90dp"
+                android:id="@+id/providorSearch"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/amount_column"
-                tools:text="1" />
+                android:layout_weight="1"
+                android:hint="Buscar por proveedor" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content">
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
             <AutoCompleteTextView
                 android:id="@+id/buyPlaces"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:hint="@string/buy_place_autocomplete_text"
                 android:inputType="none" />
 
         </com.google.android.material.textfield.TextInputLayout>
-
-        <CheckBox
-            android:id="@+id/searchMode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/search_mode"
-            android:textAlignment="center"
-            android:textSize="12sp" />
 
     </LinearLayout>
 
