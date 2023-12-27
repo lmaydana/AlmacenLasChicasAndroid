@@ -47,7 +47,7 @@ public class RequestBindingProductActivity extends AppCompatActivity {
         possibleProducts.setOnItemClickListener((adapterView, view, i, l) -> {
             String productName = adapterView.getAdapter().getItem(i).toString();
             MySqlConnection mySqlConnectionSelect = new MySqlConnection();
-            ArrayList<HashMap<String, String>> productsPrice = mySqlConnectionSelect.mysqlQueryToArrayListOfObjects("SELECT precio FROM productos WHERE nombre LIKE '%" + productName + "%'");
+            ArrayList<HashMap<String, String>> productsPrice = mySqlConnectionSelect.mysqlQueryToArrayListOfObjects("SELECT precio FROM productos WHERE nombre LIKE '" + productName + "'");
             MySqlConnection mySqlConnectionInsert = new MySqlConnection();
             mySqlConnectionInsert.mysqlQueryWithoutResponse("INSERT INTO pedidos (pedido, proveedor, precio) VALUES ('" + request + "','" + provider + "'," + productsPrice.get(0).get("precio") + ")");
             finish();
@@ -104,12 +104,12 @@ public class RequestBindingProductActivity extends AppCompatActivity {
     private String getWhere(ArrayList<String> filteredWords){
         String where = "";
         for (String keyWord: filteredWords){
-            where += "(descripcion LIKE '%"+keyWord+"%' OR descripcion LIKE '"+keyWord+"%' OR descripcion LIKE '%"+keyWord+"') AND ";
+            where += "(descripcion LIKE '%_"+keyWord+"_%' OR descripcion LIKE '_"+keyWord+"_%' OR descripcion LIKE '%_"+keyWord+"_') AND ";
         }
         return where.substring(0, where.length()-4);
     }
 
-    private ArrayList<String> filterWords(String listenedWords){
+    private ArrayList<String> filterWords(String words){
         ArrayList<String> innecesaryWordsForProductDescription = new ArrayList<>();
         innecesaryWordsForProductDescription.add("en");
         innecesaryWordsForProductDescription.add("el");
@@ -119,11 +119,23 @@ public class RequestBindingProductActivity extends AppCompatActivity {
         innecesaryWordsForProductDescription.add("una");
         innecesaryWordsForProductDescription.add("lo");
         innecesaryWordsForProductDescription.add("de");
+        innecesaryWordsForProductDescription.add("por");
+        innecesaryWordsForProductDescription.add("x");
+        innecesaryWordsForProductDescription.add("*");
 
-        ArrayList<String> separatedListenedWords = new ArrayList<>(Arrays.asList(listenedWords.split(" ")));
+        ArrayList<String> separatedListenedWords = new ArrayList<>(Arrays.asList(words.split(" ")));
         separatedListenedWords.removeAll(innecesaryWordsForProductDescription);
 
         return  separatedListenedWords;
+    }
+
+    private String filterWordsToString(String words){
+        ArrayList<String> filteredWordsArray = this.filterWords(words);
+        String filteredWords = "";
+        for (String word: filteredWordsArray){
+            filteredWords+= word + " ";
+        }
+        return filteredWords.substring(0, filteredWords.length()-1);
     }
 }
 

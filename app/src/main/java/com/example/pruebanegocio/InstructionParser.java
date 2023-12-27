@@ -28,6 +28,9 @@ public class InstructionParser {
         innecesaryWordsForProductDescription.add("una");
         innecesaryWordsForProductDescription.add("lo");
         innecesaryWordsForProductDescription.add("de");
+        innecesaryWordsForProductDescription.add("por");
+        innecesaryWordsForProductDescription.add("x");
+        innecesaryWordsForProductDescription.add("*");
     }
 
     public String getCorrectInstruction(String instruction) throws BadOrderException {
@@ -87,7 +90,7 @@ public class InstructionParser {
         ArrayList<String> separatedProductDescription = this.getProductDescription(instruction);
         for (String partOfProductDescription : separatedProductDescription) {
             //System.out.println("Parte de la descripcion: " + partOfProductDescription);
-            where += "(UPPER(descripcion) LIKE UPPER('%" + partOfProductDescription + "%') OR UPPER(descripcion) LIKE UPPER('"+partOfProductDescription+"%') OR UPPER(descripcion) LIKE UPPER('%"+partOfProductDescription+"')) "+ connectors.get(order)+" " ;
+            where += "(UPPER(descripcion) LIKE UPPER('%_" + partOfProductDescription + "_%') OR UPPER(descripcion) LIKE UPPER('"+partOfProductDescription+"%') OR UPPER(descripcion) LIKE UPPER('%_"+partOfProductDescription+"')) "+ connectors.get(order)+" " ;
             //"(descripcion LIKE '%"+keyWord+"%' OR descripcion LIKE '"+keyWord+"%' OR descripcion LIKE '%"+keyWord+"') AND "
         }
         return where.substring(0, where.length() - 4);

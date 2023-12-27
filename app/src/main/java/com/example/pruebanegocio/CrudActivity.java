@@ -88,7 +88,7 @@ public class CrudActivity extends AppCompatActivity {
         innecesaryWordsForProductDescription.add("de");
         arrayListKeyWords.removeAll(innecesaryWordsForProductDescription);
         for ( String keyWord : arrayListKeyWords){
-            where+=  "(UPPER(descripcion) LIKE UPPER('%"+keyWord+"%') OR UPPER(descripcion) LIKE UPPER( '"+keyWord+"%' ) OR UPPER(descripcion) LIKE UPPER('%"+keyWord+"')) AND ";
+            where+=  "(UPPER(descripcion) LIKE UPPER('%_"+keyWord+"%') OR UPPER(descripcion) LIKE UPPER( '"+keyWord+"%' ) OR UPPER(descripcion) LIKE UPPER('%_"+keyWord+"')) AND ";
         }
         return where.substring(0, where.length()-4);
     }
