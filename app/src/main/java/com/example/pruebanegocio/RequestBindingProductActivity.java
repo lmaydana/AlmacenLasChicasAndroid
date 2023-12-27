@@ -27,13 +27,13 @@ import okhttp3.Response;
 public class RequestBindingProductActivity extends AppCompatActivity {
 
 
-    MySqlConnection mySqlConnection;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_select_binding_product);
 
-        this.mySqlConnection = new MySqlConnection();
+
 
         String request = getIntent().getExtras().getString("request");
 
@@ -46,35 +46,13 @@ public class RequestBindingProductActivity extends AppCompatActivity {
 
         possibleProducts.setOnItemClickListener((adapterView, view, i, l) -> {
             String productName = adapterView.getAdapter().getItem(i).toString();
-            ArrayList<HashMap<String, String>> productsPrice = mySqlConnection.mysqlQueryToArrayListOfObjects("SELECT precio FROM productos WHERE nombre LIKE '%" + productName + "%'");
-            this.doQuery("INSERT INTO pedidos (pedido, proveedor, precio) VALUES ('" + request + "','" + provider + "'," + productsPrice.get(0).get("precio") + ")");
+            MySqlConnection mySqlConnectionSelect = new MySqlConnection();
+            ArrayList<HashMap<String, String>> productsPrice = mySqlConnectionSelect.mysqlQueryToArrayListOfObjects("SELECT precio FROM productos WHERE nombre LIKE '%" + productName + "%'");
+            MySqlConnection mySqlConnectionInsert = new MySqlConnection();
+           mySqlConnectionInsert.mysqlQueryWithoutResponse("INSERT INTO pedidos (pedido, proveedor, precio) VALUES ('" + request + "','" + provider + "'," + productsPrice.get(0).get("precio") + ")");
             //mySqlConnection.mysqlQueryWithoutResponse("INSERT INTO pedidos (pedido, proveedor, precio) VALUES ('" + request + "','" + provider + "'," + productsPrice.get(0).get("precio") + ")");
         });
 
-    }
-
-    private void doQuery(String query){
-        OkHttpClient client = new OkHttpClient();
-        ArrayList<String> names = new ArrayList<>();
-        names.add("query");
-        ArrayList<String> values = new ArrayList<>();
-        values.add(query);
-        RequestBody body = new FormBody(names,values);
-        Request request = new Request.Builder()
-                .url("http://186.123.109.86:8888/almacen/json_de_productos.php")
-                .post(body)
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-
-            }
-        });
     }
 
     public String[] mysqlThings(String listenedWords, String provider) {
@@ -82,7 +60,8 @@ public class RequestBindingProductActivity extends AppCompatActivity {
         ArrayList<HashMap<String, String>> relatedProducts = this.getRelatedProducts(filteredWords);
         String agroupedProductsNames = "";
         if (relatedProducts.size() == 0) {
-            mySqlConnection.mysqlQueryWithoutResponse("INSERT INTO pedidos (pedido, proveedor) VALUES ('" + listenedWords + "','" + provider + "')");
+            MySqlConnection mySqlConnectionInsert = new MySqlConnection();
+            mySqlConnectionInsert.mysqlQueryWithoutResponse("INSERT INTO pedidos (pedido, proveedor) VALUES ('" + listenedWords + "','" + provider + "')");
             finish();
         } else {
             ArrayList<String> relatedProductsNames = this.getProductsNames(relatedProducts);
@@ -108,11 +87,13 @@ public class RequestBindingProductActivity extends AppCompatActivity {
     }
 
     private ArrayList<HashMap<String,String>> getRelatedProducts(ArrayList<String> filteredWords){
-        ArrayList<HashMap<String,String>> obtainedProducts = mySqlConnection.mysqlQueryToArrayListOfObjects("SELECT nombre FROM productos WHERE " + this.getWhere(filteredWords));
+        MySqlConnection mySqlConnectionSelect = new MySqlConnection();
+        ArrayList<HashMap<String,String>> obtainedProducts = mySqlConnectionSelect.mysqlQueryToArrayListOfObjects("SELECT nombre FROM productos WHERE " + this.getWhere(filteredWords));
 
         for (int i =0; i<3 && obtainedProducts.size()==0; i++){
             filteredWords.remove(0);
-            obtainedProducts = mySqlConnection.mysqlQueryToArrayListOfObjects("SELECT nombre FROM productos WHERE " + this.getWhere(filteredWords));
+            MySqlConnection mySqlConnectionInsert = new MySqlConnection();
+            obtainedProducts = mySqlConnectionInsert.mysqlQueryToArrayListOfObjects("SELECT nombre FROM productos WHERE " + this.getWhere(filteredWords));
         }
         return obtainedProducts;
     }
