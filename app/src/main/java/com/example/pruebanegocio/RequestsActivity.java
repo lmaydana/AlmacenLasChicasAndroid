@@ -5,7 +5,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TableLayout;
@@ -13,6 +17,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,16 +29,10 @@ public class RequestsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.requests);
         AutoCompleteTextView placesForBuy = findViewById(R.id.buyPlaces);
-        AutoCompleteTextView placeForBuy = findViewById(R.id.column1BuyPlace);
-        MySqlConnection mySqlConnection = new MySqlConnection();
-        ArrayList<HashMap<String,String>> products = mySqlConnection.mysqlQueryToArrayListOfObjects("SELECT * FROM pedidos");
         loadProductsTable("");
 
         //ArrayList<String> places = new ArrayList<>();<----------Usar esto para ir guardando los proovedores desde mysql (tendran una direccion para googlemaps)
-        String[] places = getResources().getStringArray(R.array.buy_places);
-        ArrayAdapter<String> placesAdapter = new ArrayAdapter<>(this,R.layout.buy_places_items,places);
-        placesForBuy.setAdapter(placesAdapter);
-        placeForBuy.setAdapter(placesAdapter);
+        this.fillListWithQuery(placesForBuy, "SELECT nombre_proveedor FROM proveedores", "nombre_proveedor");
         placesForBuy.setOnItemClickListener(new MicroEvent(this, result -> {
             Intent requestProductBind = new Intent(this, RequestBindingProductActivity.class);
             requestProductBind.putExtra("request", result.getData() != null ? result.getData().getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS).get(0) : "");
@@ -41,12 +41,21 @@ public class RequestsActivity extends AppCompatActivity {
             loadProductsTable("");
         }));
 
+        TextInputEditText providorSearcher = findViewById(R.id.providorSearch);
+        /*providorSearcher.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                loadProductsTable("WHERE proveedor LIKE '"+providorSearcher.getText().toString()+"'");
+                return false;
+            }
+        });*/
+
 
     }
 
     private void loadProductsTable( String whereProductLike ) {
         MySqlConnection mySqlConnectionReload = new MySqlConnection();
-        String query = "SELECT * FROM pedidos" + whereProductLike;
+        String query = "SELECT * FROM pedidos " + whereProductLike;
         ArrayList<HashMap<String,String>> products = mySqlConnectionReload.mysqlQueryToArrayListOfObjects(query);
         System.out.println("Array de productos:" + products);
         ArrayList<String> colors = new ArrayList<>();
@@ -73,8 +82,16 @@ public class RequestsActivity extends AppCompatActivity {
         weights.put("pedido", 3.0f);
         weights.put("proveedor", 2.0f);
         weights.put("precio", 1.0f);
+        HashMap<String, TextView> rowView = new HashMap<>();
+        AutoCompleteTextView providers = new AutoCompleteTextView(this);
+        rowView.put("pedido", new TextView(this));
+        rowView.put("proveedor", providers);
+        rowView.put("precio", new TextView(this));
+        providers.setThreshold(1);
+        this.fillListWithQuery(providers, "SELECT nombre_proveedor FROM proveedores", "nombre_proveedor");
+
         for (String key: keys){
-            TextView productAttribute = new TextView(this);
+            TextView productAttribute = rowView.get(key);
             productAttribute.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, weights.get(key)));
             productAttribute.setGravity(Gravity.CENTER_VERTICAL);
             productAttribute.setTextAlignment(TextView.TEXT_ALIGNMENT_CENTER);
@@ -83,7 +100,27 @@ public class RequestsActivity extends AppCompatActivity {
             newRow.addView(productAttribute);
         }
 
+        providers.setOnItemClickListener((adapterView, view, i, l) -> {
+            MySqlConnection mySqlConnection = new MySqlConnection();
+            mySqlConnection.mysqlQueryWithoutResponse("UPDATE pedidos SET proveedor = '"+adapterView.getAdapter().getItem(i)+"' WHERE pedido ='"+product.get("pedido")+"'");//Seguir con el where
+        });
         productsTable.addView(newRow, new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
+    }
+
+    private void fillListWithQuery(AutoCompleteTextView list, String query, String field) {
+        MySqlConnection mySqlConnection = new MySqlConnection();
+        ArrayList<HashMap<String, String>> entities = mySqlConnection.mysqlQueryToArrayListOfObjects(query);
+        ArrayList<String> entitiesField = this.getEntitiesFieldInArrayList(entities, field);
+        ArrayAdapter<String> entitiesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, entitiesField);
+        list.setAdapter(entitiesAdapter);
+    }
+
+    private ArrayList<String> getEntitiesFieldInArrayList( ArrayList<HashMap<String, String>> entities, String field ) {
+        ArrayList<String> entitiesField = new ArrayList<>();
+        for ( HashMap<String, String> entity : entities){
+            entitiesField.add(entity.get(field));
+        }
+        return entitiesField;
     }
 
 

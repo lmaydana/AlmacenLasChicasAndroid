@@ -6,42 +6,32 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/providorSearch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Buscar por proveedor" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="0dp"
+        <AutoCompleteTextView
+            android:id="@+id/buyPlaces"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:hint="@string/buy_place_autocomplete_text"
+            android:inputType="none" />
 
-            <AutoCompleteTextView
-                android:id="@+id/buyPlaces"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/buy_place_autocomplete_text"
-                android:inputType="none" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-        </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    </LinearLayout>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/providorSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Buscar por proveedor" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TableLayout
         android:layout_width="match_parent"
@@ -92,49 +82,7 @@
         <TableLayout
             android:id="@+id/requestTable"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#0E0C0C">
-
-                <TextView
-                    android:id="@+id/textView6"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:text="Yerba Rosamonte x 500grs"
-                    android:textAlignment="center"
-                    android:textColor="@color/white" />
-
-                <AutoCompleteTextView
-                    android:id="@+id/column1BuyPlace"
-                    style="@style/Widget.AppCompat.DropDownItem.Spinner"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="0dp"
-                    android:layout_weight="2"
-                    android:dropDownWidth="match_parent"
-                    android:maxWidth="90dp"
-                    android:text="Maxiconsumo"
-                    android:textColor="@color/white" />
-
-                <TextView
-                    android:id="@+id/textView5"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="1590"
-                    android:textAlignment="center"
-                    android:textColor="@color/white" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#CC100F0F" />
-        </TableLayout>
+            android:layout_height="wrap_content"/>
     </ScrollView>
 
 </LinearLayout>
