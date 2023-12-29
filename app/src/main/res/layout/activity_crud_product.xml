@@ -98,7 +98,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="#6750A4"
-                android:text="@string/product_request_column"
+                android:text="@string/name_hint"
                 android:textAlignment="center"
                 android:textColor="@color/white" />
 

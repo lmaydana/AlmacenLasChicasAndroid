@@ -31,6 +31,15 @@ public class InstructionParser {
         innecesaryWordsForProductDescription.add("por");
         innecesaryWordsForProductDescription.add("x");
         innecesaryWordsForProductDescription.add("*");
+        innecesaryWordsForProductDescription.add("g");
+        innecesaryWordsForProductDescription.add("gramos");
+        innecesaryWordsForProductDescription.add("mililitros");
+        innecesaryWordsForProductDescription.add("litro");
+        innecesaryWordsForProductDescription.add("litros");
+        innecesaryWordsForProductDescription.add("L");
+        innecesaryWordsForProductDescription.add("ML");
+        innecesaryWordsForProductDescription.add("kilogramos");
+        innecesaryWordsForProductDescription.add("KG");
     }
 
     public String getCorrectInstruction(String instruction) throws BadOrderException {

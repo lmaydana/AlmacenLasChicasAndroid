@@ -24,7 +24,7 @@ public class AddProductActivity extends AppCompatActivity {
             String productPorcentage = porcentageET.getText().toString();
             String productDescription = descriptionET.getText().toString();
             MySqlConnection mySqlConnection = new MySqlConnection();
-            mySqlConnection.mysqlQueryWithoutResponse("INSERT INTO productos (codigo,nombre, precio, porcentaje, descripcion) VALUES ("+productBarcode+",'"+productName+"',"+productPrice+","+productPorcentage+",'"+productName+" "+productDescription+"')");
+            mySqlConnection.mysqlQueryWithoutResponse("INSERT INTO productos (codigo, nombre, precio, porcentaje, descripcion) VALUES ("+productBarcode+",'"+productName+"',"+productPrice+","+productPorcentage+",'"+productName+" "+productDescription+"') ON DUPLICATE KEY UPDATE SET nombre = '"+productName+"', precio = "+productPrice+", porcentaje="+productPorcentage+", descripcion='"+productDescription+"'");
             finish();
         });
     }

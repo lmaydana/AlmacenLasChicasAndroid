@@ -27,11 +27,16 @@ public class CrudActivity extends AppCompatActivity {
         this.setInitialThings();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.loadProductsTable("");
+    }
+
     private void setInitialThings(){
 
-        MySqlConnection mySqlConnection = new MySqlConnection();
-        ArrayList<HashMap<String,String>> products = mySqlConnection.mysqlQueryToArrayListOfObjects("SELECT * FROM productos");
-        this.loadProductsTable(products);
+
+        this.loadProductsTable("");
 
         Button addProductButton = findViewById(R.id.addProduct);
         addProductButton.setOnClickListener(new BarCodeEvent(this, result->{
@@ -46,9 +51,10 @@ public class CrudActivity extends AppCompatActivity {
         Button microButton = findViewById(R.id.microButton);
         microButton.setOnClickListener(new MicroEvent(this, result -> {
             ArrayList<String> listenedWordsArray = result.getData() != null ? result.getData().getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS) : new ArrayList<>();
-            String listenedWords = listenedWordsArray.get(0);
-            //System.out.println("Palabras escuchadas:" + listenedWords);
-            lauchProductSelectIntent(listenedWords);
+            if( listenedWordsArray.size() > 0 ) {
+                String listenedWords = listenedWordsArray.get(0);
+                lauchProductSelectIntent(listenedWords);
+            }
         }));
 
         SearchView productSearch = findViewById(R.id.searchBar);
@@ -60,12 +66,8 @@ public class CrudActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                MySqlConnection mySqlConnection = new MySqlConnection();
                 String where = getWhere(s);
-                ArrayList<HashMap<String,String>> products = mySqlConnection.mysqlQueryToArrayListOfObjects("SELECT * FROM productos WHERE " + where);
-                TableLayout productsTable = findViewById(R.id.productsTable);
-                productsTable.removeAllViews();
-                loadProductsTable(products);
+                loadProductsTable(where);
                 return false;
             }
         });
@@ -93,19 +95,22 @@ public class CrudActivity extends AppCompatActivity {
         return where.substring(0, where.length()-4);
     }
 
-    private void loadProductsTable(ArrayList<HashMap<String,String>> products) {
+    private void loadProductsTable(String where) {
+        MySqlConnection mySqlConnection = new MySqlConnection();
+        ArrayList<HashMap<String,String>> products = mySqlConnection.mysqlQueryToArrayListOfObjects("SELECT * FROM productos ORDER BY nombre ASC LIMIT 30 " + where);
         ArrayList<String> colors = new ArrayList<>();
+        TableLayout productsTable = findViewById(R.id.productsTable);
         colors.add("#0E0C0C");
         colors.add("#CC100F0F");
+        productsTable.removeAllViews();
         int colorIndex = 0;
         for (HashMap<String, String> product: products){
-            this.addNewRow(product, colors.get(colorIndex%2));
+            this.addNewRow(productsTable, product, colors.get(colorIndex%2));
             colorIndex++;
         }
     }
 
-    private void addNewRow(HashMap<String, String> product, String color) {
-        TableLayout productsTable = findViewById(R.id.productsTable);
+    private void addNewRow(TableLayout productsTable, HashMap<String, String> product, String color) {
         TableRow newRow = new TableRow(this);
         newRow.setLayoutParams(new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         newRow.setBackgroundColor(Color.parseColor(color));

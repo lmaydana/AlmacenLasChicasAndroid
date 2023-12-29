@@ -49,9 +49,8 @@ public class RequestBindingProductActivity extends AppCompatActivity {
             MySqlConnection mySqlConnectionSelect = new MySqlConnection();
             ArrayList<HashMap<String, String>> productsPrice = mySqlConnectionSelect.mysqlQueryToArrayListOfObjects("SELECT precio FROM productos WHERE nombre LIKE '" + productName + "'");
             MySqlConnection mySqlConnectionInsert = new MySqlConnection();
-            mySqlConnectionInsert.mysqlQueryWithoutResponse("INSERT INTO pedidos (pedido, proveedor, precio) VALUES ('" + request + "','" + provider + "'," + productsPrice.get(0).get("precio") + ")");
+            mySqlConnectionInsert.mysqlQueryWithoutResponse("INSERT INTO pedidos (pedido, producto_asociado, proveedor, precio) VALUES ('" + request + "','"+productName+"','" + provider + "'," + productsPrice.get(0).get("precio") + ")");
             finish();
-            //mySqlConnection.mysqlQueryWithoutResponse("INSERT INTO pedidos (pedido, proveedor, precio) VALUES ('" + request + "','" + provider + "'," + productsPrice.get(0).get("precio") + ")");
         });
 
     }
@@ -91,11 +90,9 @@ public class RequestBindingProductActivity extends AppCompatActivity {
         MySqlConnection mySqlConnectionSelect = new MySqlConnection();
         ArrayList<HashMap<String,String>> obtainedProducts = mySqlConnectionSelect.mysqlQueryToArrayListOfObjects("SELECT nombre FROM productos WHERE " + this.getWhere(filteredWords));
 
-        //System.out.println("LA consulta iterada es:SELECT nombre FROM productos WHERE " + this.getWhere(filteredWords));
         for (int i =0; i<2 && obtainedProducts.size()==0; i++){
             filteredWords.remove(0);
             MySqlConnection mySqlConnectionInsert = new MySqlConnection();
-            //System.out.println("LA consulta iterada es:SELECT nombre FROM productos WHERE " + this.getWhere(filteredWords));
             obtainedProducts = mySqlConnectionInsert.mysqlQueryToArrayListOfObjects("SELECT nombre FROM productos WHERE " + this.getWhere(filteredWords));
         }
         return obtainedProducts;
@@ -122,6 +119,15 @@ public class RequestBindingProductActivity extends AppCompatActivity {
         innecesaryWordsForProductDescription.add("por");
         innecesaryWordsForProductDescription.add("x");
         innecesaryWordsForProductDescription.add("*");
+        innecesaryWordsForProductDescription.add("g");
+        innecesaryWordsForProductDescription.add("gramos");
+        innecesaryWordsForProductDescription.add("mililitros");
+        innecesaryWordsForProductDescription.add("litro");
+        innecesaryWordsForProductDescription.add("litros");
+        innecesaryWordsForProductDescription.add("L");
+        innecesaryWordsForProductDescription.add("ML");
+        innecesaryWordsForProductDescription.add("kilogramos");
+        innecesaryWordsForProductDescription.add("KG");
 
         ArrayList<String> separatedListenedWords = new ArrayList<>(Arrays.asList(words.split(" ")));
         separatedListenedWords.removeAll(innecesaryWordsForProductDescription);

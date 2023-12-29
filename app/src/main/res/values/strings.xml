@@ -21,6 +21,7 @@
     <string name="description_hint">Descripción del producto</string>
     <string name="binding_product_description">Elija el producto que se va a relacionar con el pedido</string>
     <string name="providor_search_hint">Buscar por proveedor</string>
+    <string name="related_product">Producto relacionado</string>
     <string-array name="buy_places">
         <item>General</item>
         <item>Dulcenter</item>
