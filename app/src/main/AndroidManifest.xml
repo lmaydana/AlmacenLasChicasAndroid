@@ -37,6 +37,10 @@
             android:theme="@style/Theme.AppCompat.Light.Dialog"
             />
         <activity
+            android:name=".AcceptUpdateActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"
+            />
+        <activity
             android:name=".AddProductActivity"
             android:theme="@style/Theme.AppCompat.Light.Dialog"
             />

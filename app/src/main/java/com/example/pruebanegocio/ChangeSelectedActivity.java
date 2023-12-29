@@ -47,6 +47,7 @@ public class ChangeSelectedActivity extends AppCompatActivity {
 
             Button cancelButton = findViewById(R.id.cancel);
             cancelButton.setOnClickListener(view -> {
+
                 finish();
             });
         } catch (BadOrderException e) {

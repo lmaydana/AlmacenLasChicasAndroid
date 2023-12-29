@@ -1,18 +1,27 @@
 package com.example.pruebanegocio;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.text.InputType;
 import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.SearchView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,7 +62,7 @@ public class CrudActivity extends AppCompatActivity {
             ArrayList<String> listenedWordsArray = result.getData() != null ? result.getData().getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS) : new ArrayList<>();
             if( listenedWordsArray.size() > 0 ) {
                 String listenedWords = listenedWordsArray.get(0);
-                lauchProductSelectIntent(listenedWords);
+                launchProductSelectIntent(listenedWords);
             }
         }));
 
@@ -119,20 +128,76 @@ public class CrudActivity extends AppCompatActivity {
         keys.add("nombre");
         keys.add("precio");
         keys.add("porcentaje");
+        HashMap<String, EditText> fields = new HashMap<>();
         for (String key: keys){
-            TextView productAttribute = new TextView(this);
+            EditText productAttribute = new TextInputEditText(this);
+            productAttribute.setBackgroundResource(android.R.color.transparent);
             productAttribute.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1.0f));
             productAttribute.setGravity(Gravity.CENTER_VERTICAL);
             productAttribute.setTextAlignment(TextView.TEXT_ALIGNMENT_CENTER);
             productAttribute.setText(product.get(key));
             productAttribute.setTextColor(Color.parseColor("#ffffff"));
+            fields.put(key, productAttribute);
             newRow.addView(productAttribute);
         }
+
+        this.setFieldsListener(fields);
 
         productsTable.addView(newRow, new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
     }
 
-    private void lauchProductSelectIntent(String listenedWords) {
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if ( v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent( event );
+    }
+
+    private void setFieldsListener(HashMap<String, EditText> fields) {
+        EditText codeField = fields.remove("codigo");
+        codeField.setFocusable(false);
+        String code = codeField.getText().toString();
+        fields.forEach( (key, field)->{
+            field.setFocusable(false);
+            field.setOnClickListener(new DoubleClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+
+                }
+
+                @Override
+                public void onDoubleClick(View v) {
+                    field.setFocusableInTouchMode(true);
+                    field.requestFocusFromTouch();
+                }
+            });
+            final String[] initialText = {""};
+            field.setOnFocusChangeListener((view, b) -> {
+                if( b ) {
+                    initialText[0] = field.getText().toString();
+                }else {
+                    if( !initialText[0].equals(field.getText().toString()) ) {
+                        Intent updaterActivity = new Intent(this, AcceptUpdateActivity.class);
+                        String query = "UPDATE productos SET " + key + " = '" + field.getText().toString() + "' WHERE codigo = " + code;
+                        updaterActivity.putExtra("query", query);
+                        startActivity(updaterActivity);
+                    }
+                }
+            });
+        });
+    }
+
+    private void launchProductSelectIntent(String listenedWords) {
         Intent changeProductIntent = new Intent(this, ChangeSelectedActivity.class);
         changeProductIntent.putExtra("listenedWords", listenedWords);
         startActivity(changeProductIntent);
