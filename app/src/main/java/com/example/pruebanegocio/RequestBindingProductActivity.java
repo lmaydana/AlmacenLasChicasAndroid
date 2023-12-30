@@ -1,28 +1,15 @@
 package com.example.pruebanegocio;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.speech.RecognizerIntent;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.OkHttp;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class RequestBindingProductActivity extends AppCompatActivity {
 
@@ -37,7 +24,6 @@ public class RequestBindingProductActivity extends AppCompatActivity {
 
         String request = getIntent().getExtras().getString("request");
 
-        System.out.println("Salio de request: "+ request);
         String provider = getIntent().getExtras().getString("provider");
         String[] productsNames = this.mysqlThings(request, provider);
         ListView possibleProducts = findViewById(R.id.productsToChoiceRequest);
@@ -67,6 +53,7 @@ public class RequestBindingProductActivity extends AppCompatActivity {
             ArrayList<String> relatedProductsNames = this.getProductsNames(relatedProducts);
             agroupedProductsNames = this.agroupProductNames(relatedProductsNames);
         }
+        System.out.println("El array formado nombres: "+agroupedProductsNames.split("#"));
         return agroupedProductsNames.split("#");
     }
 
@@ -89,11 +76,11 @@ public class RequestBindingProductActivity extends AppCompatActivity {
     private ArrayList<HashMap<String,String>> getRelatedProducts(ArrayList<String> filteredWords){
         MySqlConnection mySqlConnectionSelect = new MySqlConnection();
         ArrayList<HashMap<String,String>> obtainedProducts = mySqlConnectionSelect.mysqlQueryToArrayListOfObjects("SELECT nombre FROM productos WHERE " + this.getWhere(filteredWords));
-
-        for (int i =0; i<2 && obtainedProducts.size()==0; i++){
-            filteredWords.remove(0);
+        filteredWords.remove(0);
+        for (int i =0; i<2 && obtainedProducts.size()==0 && filteredWords.size()>0; i++){
             MySqlConnection mySqlConnectionInsert = new MySqlConnection();
             obtainedProducts = mySqlConnectionInsert.mysqlQueryToArrayListOfObjects("SELECT nombre FROM productos WHERE " + this.getWhere(filteredWords));
+            filteredWords.remove(0);
         }
         return obtainedProducts;
     }
@@ -103,6 +90,7 @@ public class RequestBindingProductActivity extends AppCompatActivity {
         for (String keyWord: filteredWords){
             where += "(descripcion LIKE '%_"+keyWord+"_%' OR descripcion LIKE '_"+keyWord+"_%' OR descripcion LIKE '%_"+keyWord+"_') AND ";
         }
+        System.out.println("El where:"+where);
         return where.substring(0, where.length()-4);
     }
 
