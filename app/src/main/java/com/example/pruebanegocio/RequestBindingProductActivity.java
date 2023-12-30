@@ -123,13 +123,5 @@ public class RequestBindingProductActivity extends AppCompatActivity {
         return  separatedListenedWords;
     }
 
-    private String filterWordsToString(String words){
-        ArrayList<String> filteredWordsArray = this.filterWords(words);
-        String filteredWords = "";
-        for (String word: filteredWordsArray){
-            filteredWords+= word + " ";
-        }
-        return filteredWords.substring(0, filteredWords.length()-1);
-    }
 }
 
