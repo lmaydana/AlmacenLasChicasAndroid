@@ -75,7 +75,7 @@ public class CrudActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                String where = getWhere(s);
+                String where = "WHERE "+getWhere(s);
                 loadProductsTable(where);
                 return false;
             }
@@ -106,7 +106,7 @@ public class CrudActivity extends AppCompatActivity {
 
     private void loadProductsTable(String where) {
         MySqlConnection mySqlConnection = new MySqlConnection();
-        ArrayList<HashMap<String,String>> products = mySqlConnection.mysqlQueryToArrayListOfObjects("SELECT * FROM productos ORDER BY nombre ASC LIMIT 30 " + where);
+        ArrayList<HashMap<String,String>> products = mySqlConnection.mysqlQueryToArrayListOfObjects("SELECT * FROM productos "+where+" ORDER BY nombre ASC LIMIT 30");
         ArrayList<String> colors = new ArrayList<>();
         TableLayout productsTable = findViewById(R.id.productsTable);
         colors.add("#0E0C0C");
@@ -191,6 +191,8 @@ public class CrudActivity extends AppCompatActivity {
                         String query = "UPDATE productos SET " + key + " = '" + field.getText().toString() + "' WHERE codigo = " + code;
                         updaterActivity.putExtra("query", query);
                         startActivity(updaterActivity);
+                        SearchView productSearch = findViewById(R.id.searchBar);
+                        productSearch.setQuery("",false);
                     }
                 }
             });

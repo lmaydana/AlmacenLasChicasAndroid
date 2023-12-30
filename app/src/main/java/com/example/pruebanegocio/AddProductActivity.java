@@ -1,6 +1,6 @@
 package com.example.pruebanegocio;
 
-import android.os.Bundle;
+import  android.os.Bundle;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +24,7 @@ public class AddProductActivity extends AppCompatActivity {
             String productPorcentage = porcentageET.getText().toString();
             String productDescription = descriptionET.getText().toString();
             MySqlConnection mySqlConnection = new MySqlConnection();
-            mySqlConnection.mysqlQueryWithoutResponse("INSERT INTO productos (codigo, nombre, precio, porcentaje, descripcion) VALUES ("+productBarcode+",'"+productName+"',"+productPrice+","+productPorcentage+",'"+productName+" "+productDescription+"') ON DUPLICATE KEY UPDATE SET nombre = '"+productName+"', precio = "+productPrice+", porcentaje="+productPorcentage+", descripcion='"+productDescription+"'");
+            mySqlConnection.mysqlQueryWithoutResponse("REPLACE INTO productos (codigo, nombre, precio, porcentaje, descripcion) VALUES ("+productBarcode+",'"+productName+"',"+productPrice+","+productPorcentage+",'"+productName+" "+productDescription+"')");
             finish();
         });
     }

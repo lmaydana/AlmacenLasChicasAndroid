@@ -35,8 +35,7 @@ public class MySqlConnection extends Activity {
     public ArrayList<HashMap<String, String>> mysqlQueryToArrayListOfObjects(String query){
         ArrayList<HashMap<String,String>> objects = new ArrayList<>();
         String response = getResponse(query);
-        System.out.println("La constulta es:"+query);
-        System.out.println("Respuesta de la pagina: "+ response);
+
         try {
 
             JSONArray jsonArray= new JSONArray(response);
@@ -59,9 +58,11 @@ public class MySqlConnection extends Activity {
     }
 
     private String getResponse(String query){
+        System.out.println("La constulta es:"+query);
         String response = "";
         try {
             response = conn.execute(URL, query).get();
+            System.out.println("Respuesta de la pagina: "+ response);
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -69,6 +70,7 @@ public class MySqlConnection extends Activity {
     }
 
     public void mysqlQueryWithoutResponse(String query){
+        System.out.println("La constulta es:"+query);
         this.getResponse(query);
     }
 
