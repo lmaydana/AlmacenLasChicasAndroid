@@ -19,6 +19,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class RequestsActivity extends AppCompatActivity {
@@ -26,6 +27,12 @@ public class RequestsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        RequestsTable requestsTable = new RequestsTable();
+        SearchView searchRequest = findViewById(R.id.providorSearch);
+        TableLayout requestTable = findViewById(R.id.requestTable);
+        String[] arrayKeywords = searchRequest.getQuery().toString().split(" ");
+        ArrayList<String> keywords = new ArrayList<>(Arrays.asList(arrayKeywords));
+        requestsTable.loadTable(requestTable, keywords, this);
         this.loadRequestsTable("");
     }
 
@@ -39,10 +46,18 @@ public class RequestsActivity extends AppCompatActivity {
         //ArrayList<String> places = new ArrayList<>();<----------Usar esto para ir guardando los proovedores desde mysql (tendran una direccion para googlemaps)
         this.fillListWithQuery(placesForBuy, "SELECT nombre_proveedor FROM proveedores", "nombre_proveedor");
         placesForBuy.setOnItemClickListener(new MicroEvent(this, result -> {
+            String instructionString = result.getData() != null ? result.getData().getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS).get(0) : "";
+            instructionString = "pedir " + instructionString;
+            InstructionsParser instructionsParser = new InstructionsParser(instructionString, this);
+            Instruction instruction = instructionsParser.getInstruction();
+            instruction.execute();
+
+            //---------------------------------ABAJO LO VIEJO----------------------------------------------------------------------------------------------------------------------
             Intent requestProductBind = new Intent(this, RequestBindingProductActivity.class);
             requestProductBind.putExtra("request", result.getData() != null ? result.getData().getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS).get(0) : "");
             requestProductBind.putExtra("provider", placesForBuy.getText().toString());
             startActivity(requestProductBind);
+            //---------------------------------------------------------------------------------------------------------------------------------------------------------------------
         }));
 
 

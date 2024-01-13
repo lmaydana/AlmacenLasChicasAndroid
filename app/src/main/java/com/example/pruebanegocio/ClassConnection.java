@@ -27,7 +27,7 @@ public class ClassConnection extends AsyncTask<String, String, String> {
 
     OkHttpClient client = new OkHttpClient();
 
-    String post(String url, String json) throws IOException {
+    private String post(String url, String json) throws IOException {
         ArrayList<String> names = new ArrayList<>();
         names.add("query");
         ArrayList<String> values = new ArrayList<>();

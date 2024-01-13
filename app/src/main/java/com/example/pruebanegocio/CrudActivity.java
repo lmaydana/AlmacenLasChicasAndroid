@@ -1,5 +1,6 @@
 package com.example.pruebanegocio;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -67,6 +68,8 @@ public class CrudActivity extends AppCompatActivity {
         }));
 
         SearchView productSearch = findViewById(R.id.searchBar);
+
+        Activity activity = this;
         productSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -74,9 +77,13 @@ public class CrudActivity extends AppCompatActivity {
             }
 
             @Override
-            public boolean onQueryTextChange(String s) {
-                String where = "WHERE "+getWhere(s);
+            public boolean onQueryTextChange(String wordsToSearch) {
+                String where = "WHERE "+getWhere(wordsToSearch);
                 loadProductsTable(where);
+                ProductsTable productsTable = new ProductsTable();
+                TableLayout thisActivityProductsTable = findViewById(R.id.productsTable);
+                String[] filteredWords = new Filter(wordsToSearch).getFilteredWordsInStringArray();
+                productsTable.loadTable(thisActivityProductsTable, new ArrayList<String>(Arrays.asList(filteredWords)), activity);
                 return false;
             }
         });
@@ -97,6 +104,18 @@ public class CrudActivity extends AppCompatActivity {
         innecesaryWordsForProductDescription.add("una");
         innecesaryWordsForProductDescription.add("lo");
         innecesaryWordsForProductDescription.add("de");
+        innecesaryWordsForProductDescription.add("por");
+        innecesaryWordsForProductDescription.add("x");
+        innecesaryWordsForProductDescription.add("*");
+        innecesaryWordsForProductDescription.add("g");
+        innecesaryWordsForProductDescription.add("gramos");
+        innecesaryWordsForProductDescription.add("mililitros");
+        innecesaryWordsForProductDescription.add("litro");
+        innecesaryWordsForProductDescription.add("litros");
+        innecesaryWordsForProductDescription.add("L");
+        innecesaryWordsForProductDescription.add("ML");
+        innecesaryWordsForProductDescription.add("kilogramos");
+        innecesaryWordsForProductDescription.add("KG");
         arrayListKeyWords.removeAll(innecesaryWordsForProductDescription);
         for ( String keyWord : arrayListKeyWords){
             where+=  "(UPPER(descripcion) LIKE UPPER('%_"+keyWord+"%') OR UPPER(descripcion) LIKE UPPER( '"+keyWord+"%' ) OR UPPER(descripcion) LIKE UPPER('%_"+keyWord+"')) AND ";
@@ -182,8 +201,8 @@ public class CrudActivity extends AppCompatActivity {
                 }
             });
             final String[] initialText = {""};
-            field.setOnFocusChangeListener((view, b) -> {
-                if( b ) {
+            field.setOnFocusChangeListener((view, hasFocus) -> {
+                if( hasFocus ) {
                     initialText[0] = field.getText().toString();
                 }else {
                     if( !initialText[0].equals(field.getText().toString()) ) {

@@ -21,10 +21,16 @@ public class AddProductActivity extends AppCompatActivity {
         addProductButton.setOnClickListener(view -> {
             String productName = nameET.getText().toString();
             String productPrice = priceET.getText().toString();
-            String productPorcentage = porcentageET.getText().toString();
+            String productPercentage = porcentageET.getText().toString();
             String productDescription = descriptionET.getText().toString();
-            MySqlConnection mySqlConnection = new MySqlConnection();
-            mySqlConnection.mysqlQueryWithoutResponse("REPLACE INTO productos (codigo, nombre, precio, porcentaje, descripcion) VALUES ("+productBarcode+",'"+productName+"',"+productPrice+","+productPorcentage+",'"+productName+" "+productDescription+"')");
+
+            //------------------------------ ABAJO LO VIEJO------------------------------------------------------------
+            //MySqlConnection mySqlConnection = new MySqlConnection();
+            //mySqlConnection.mysqlQueryWithoutResponse("REPLACE INTO productos (codigo, nombre, precio, porcentaje, descripcion) VALUES ("+productBarcode+",'"+productName+"',"+productPrice+","+productPercentage+",'"+productName+" "+productDescription+"')");
+            //--------------------------------------------------------------------------------------------------------
+
+            ProductsTable productsTable = new ProductsTable();
+            productsTable.addOrReplace(productBarcode, productName, productPrice, productPercentage, productDescription);
             finish();
         });
     }

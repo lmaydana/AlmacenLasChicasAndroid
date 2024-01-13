@@ -13,14 +13,34 @@ import java.util.HashMap;
 
 public class RequestBindingProductActivity extends AppCompatActivity {
 
-
-
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_select_binding_product);
 
+        ListView possibleProductsList = findViewById(R.id.productsToChoiceRequest);
 
+        String[] relatedWords = getIntent().getExtras().getStringArray("relatedWords");
+        String requestNew = getIntent().getExtras().getString("request");
+        String providerNew = getIntent().getExtras().getString("provider");
+
+        ProductsTable productsTable = new ProductsTable();
+        productsTable.doWithRelatedProductsTo(new ArrayList<>(Arrays.asList(relatedWords)), relatedProducts->{
+
+            ProductsListLoader productsListLoader = new ProductsListLoader(this);
+            productsListLoader.loadListOfProducts(possibleProductsList, relatedProducts);
+
+            possibleProductsList.setOnItemClickListener((adapterView, view, i, l) -> {
+                HashMap<String,String> product = relatedProducts.get(i);
+                String productName = product.get("nombre");
+                RequestsTable requestsTable = new RequestsTable();
+                requestsTable.add(requestNew, productName, providerNew, product.get("precio"));
+                finish();
+            });
+        });
+
+
+
+        //-----------------------------ABAJO LO VIEJO-----------------------------------------------------------------------------------------------------------------------------------
 
         String request = getIntent().getExtras().getString("request");
 
@@ -38,6 +58,8 @@ public class RequestBindingProductActivity extends AppCompatActivity {
             mySqlConnectionInsert.mysqlQueryWithoutResponse("INSERT INTO pedidos (pedido, producto_asociado, proveedor, precio) VALUES ('" + request + "','"+productName+"','" + provider + "'," + productsPrice.get(0).get("precio") + ")");
             finish();
         });
+
+        //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     }
 

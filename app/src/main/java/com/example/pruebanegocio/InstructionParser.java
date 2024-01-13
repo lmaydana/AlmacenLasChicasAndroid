@@ -53,8 +53,8 @@ public class InstructionParser {
             case "cambiar":
                 break;
             case "aumentar":
-                Double porcentage = 1 + Double.parseDouble(newPrice) / 100;
-                newPrice = "precio*" + porcentage;
+                Double percentage = 1 + Double.parseDouble(newPrice) / 100;
+                newPrice = "precio*" + percentage;
                 break;
 
         }

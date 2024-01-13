@@ -13,15 +13,20 @@ public class AcceptUpdateActivity extends Activity {
     }
 
     private void setUpdater() {
-        String query = getIntent().getExtras().getString("query");
+        Bundle extras = this.getIntent().getExtras();
+        String field = extras.getString("field");
+        String value = extras.getString("value");
+        String code = extras.getString("code");
+
         Button acceptBtn = findViewById(R.id.acceptButton);
         Button cancelButton = findViewById(R.id.cancelButton);
         acceptBtn.setOnClickListener(view -> {
-            MySqlConnection mySqlConnection = new MySqlConnection();
-            mySqlConnection.mysqlQueryWithoutResponse(query);
+            ProductsTable productsTable = new ProductsTable();
+            productsTable.modifyProductFieldWhereCodeEquals( field, value, code );
             finish();
         });
 
         cancelButton.setOnClickListener(view -> finish());
     }
+
 }
