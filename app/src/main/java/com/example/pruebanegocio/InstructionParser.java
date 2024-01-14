@@ -130,7 +130,10 @@ public class InstructionParser {
         String instructionCopy = String.copyValueOf(instruction.toCharArray());
         ArrayList<String> partsOfTheProductDescription = new ArrayList<>(Arrays.asList(instructionCopy.split(" ")));
         partsOfTheProductDescription.remove(order);
-        partsOfTheProductDescription.removeAll(this.innecesaryWordsForProductDescription);
+
+        if( partsOfTheProductDescription.size() > 2 ) {
+            partsOfTheProductDescription.removeAll(this.innecesaryWordsForProductDescription);
+        }
 
         System.out.println("Array a String: " + partsOfTheProductDescription);
 

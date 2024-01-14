@@ -39,13 +39,21 @@ public class CrudActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        this.loadProductsTable("");
+        String where = "";
+        Bundle bundle = this.getIntent().getExtras();
+        if (bundle != null) {
+            String possibleWhere = this.getIntent().getExtras().getString("where");
+            if( possibleWhere != null ){
+                where = possibleWhere;
+            }
+        }
+        SearchView productSearch = findViewById(R.id.searchBar);
+        productSearch.setQuery(where, false);
+        System.out.println("WHERE RESUME:"+where);
+        this.loadProductsTable("WHERE "+ getWhere(where));
     }
 
     private void setInitialThings(){
-
-
-        this.loadProductsTable("");
 
         Button addProductButton = findViewById(R.id.addProduct);
         addProductButton.setOnClickListener(new BarCodeEvent(this, result->{
@@ -97,7 +105,9 @@ public class CrudActivity extends AppCompatActivity {
         innecesaryWordsForProductDescription.add("una");
         innecesaryWordsForProductDescription.add("lo");
         innecesaryWordsForProductDescription.add("de");
-        arrayListKeyWords.removeAll(innecesaryWordsForProductDescription);
+        if( arrayListKeyWords.size() > 1 ) {
+            arrayListKeyWords.removeAll(innecesaryWordsForProductDescription);
+        }
         for ( String keyWord : arrayListKeyWords){
             where+=  "(UPPER(descripcion) LIKE UPPER('%_"+keyWord+"%') OR UPPER(descripcion) LIKE UPPER( '"+keyWord+"%' ) OR UPPER(descripcion) LIKE UPPER('%_"+keyWord+"')) AND ";
         }
@@ -190,9 +200,10 @@ public class CrudActivity extends AppCompatActivity {
                         Intent updaterActivity = new Intent(this, AcceptUpdateActivity.class);
                         String query = "UPDATE productos SET " + key + " = '" + field.getText().toString() + "' WHERE codigo = " + code;
                         updaterActivity.putExtra("query", query);
-                        startActivity(updaterActivity);
                         SearchView productSearch = findViewById(R.id.searchBar);
+                        this.getIntent().putExtra("where", productSearch.getQuery().toString());
                         productSearch.setQuery("",false);
+                        startActivity(updaterActivity);
                     }
                 }
             });

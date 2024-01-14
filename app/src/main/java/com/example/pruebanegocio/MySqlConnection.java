@@ -24,7 +24,7 @@ public class MySqlConnection extends Activity {
 
     private ClassConnection conn;
 
-    private final String URL = "http://186.123.109.86:8888/almacen/json_de_productos.php";
+    private final String URL = "http://laschicas.sytes.net:8888/almacen/json_de_productos.php";
 
 
     public MySqlConnection(){
