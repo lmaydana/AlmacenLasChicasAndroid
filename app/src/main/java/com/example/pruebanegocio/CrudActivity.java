@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.text.InputType;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,6 @@ public class CrudActivity extends AppCompatActivity {
         }
         SearchView productSearch = findViewById(R.id.searchBar);
         productSearch.setQuery(where, false);
-        System.out.println("WHERE RESUME:"+where);
         this.loadProductsTable("WHERE "+ getWhere(where));
     }
 
@@ -75,16 +75,20 @@ public class CrudActivity extends AppCompatActivity {
         }));
 
         SearchView productSearch = findViewById(R.id.searchBar);
+
         productSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+
+                String where = "WHERE " + getWhere(s);
+                loadProductsTable(where);
+
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
-                String where = "WHERE "+getWhere(s);
-                loadProductsTable(where);
+
                 return false;
             }
         });
